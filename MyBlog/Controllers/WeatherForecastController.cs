@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 
 namespace MyBlog.Controllers
 {
+    /// <summary>
+    /// Weather controller
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
+    [Produces("application/json")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -22,8 +26,26 @@ namespace MyBlog.Controllers
         {
             _logger = logger;
         }
-
+        /// <summary>
+        /// Gets weather forecast
+        /// </summary>
+        /// <returns>IEnumerable of weatherforecast</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /weatherforecast
+        ///     {
+        ///        "id": 1,
+        ///        "name": "Item #1",
+        ///        "isComplete": true
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="201">Returns the newly created item</response>
+        /// <response code="400">If the item is null</response>
         [HttpGet]
+        //[ProducesResponseType(StatusCodes.Status201Created)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IEnumerable<WeatherForecast> Get()
         {
             var rng = new Random();
