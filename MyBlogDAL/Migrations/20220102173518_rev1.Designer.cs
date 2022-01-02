@@ -10,8 +10,8 @@ using MyBlogDAL;
 namespace MyBlogDAL.Migrations
 {
     [DbContext(typeof(MyBlogDBContext))]
-    [Migration("20220102103929_initial")]
-    partial class initial
+    [Migration("20220102173518_rev1")]
+    partial class rev1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -182,10 +182,7 @@ namespace MyBlogDAL.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<int>("CreatorId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatorId1")
+                    b.Property<string>("CreatorId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("DateOfCreation")
@@ -200,7 +197,7 @@ namespace MyBlogDAL.Migrations
 
                     b.HasIndex("BlogId");
 
-                    b.HasIndex("CreatorId1");
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("Articles");
                 });
@@ -212,10 +209,7 @@ namespace MyBlogDAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CreatorId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatorId1")
+                    b.Property<string>("CreatorId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
@@ -223,7 +217,7 @@ namespace MyBlogDAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatorId1");
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("Blogs");
                 });
@@ -238,10 +232,7 @@ namespace MyBlogDAL.Migrations
                     b.Property<int>("ArticleId")
                         .HasColumnType("int");
 
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AuthorId1")
+                    b.Property<string>("AuthorId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
@@ -254,7 +245,7 @@ namespace MyBlogDAL.Migrations
 
                     b.HasIndex("ArticleId");
 
-                    b.HasIndex("AuthorId1");
+                    b.HasIndex("AuthorId");
 
                     b.ToTable("Comments");
                 });
@@ -266,10 +257,7 @@ namespace MyBlogDAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CreatorId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatorId1")
+                    b.Property<string>("CreatorId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Text")
@@ -277,7 +265,7 @@ namespace MyBlogDAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatorId1");
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("Tags");
                 });
@@ -426,7 +414,7 @@ namespace MyBlogDAL.Migrations
 
                     b.HasOne("MyBlogDAL.Entities.User", "Creator")
                         .WithMany("Articles")
-                        .HasForeignKey("CreatorId1");
+                        .HasForeignKey("CreatorId");
 
                     b.Navigation("Blog");
 
@@ -437,7 +425,7 @@ namespace MyBlogDAL.Migrations
                 {
                     b.HasOne("MyBlogDAL.Entities.User", "Creator")
                         .WithMany("Blogs")
-                        .HasForeignKey("CreatorId1");
+                        .HasForeignKey("CreatorId");
 
                     b.Navigation("Creator");
                 });
@@ -452,7 +440,7 @@ namespace MyBlogDAL.Migrations
 
                     b.HasOne("MyBlogDAL.Entities.User", "Author")
                         .WithMany("Comments")
-                        .HasForeignKey("AuthorId1");
+                        .HasForeignKey("AuthorId");
 
                     b.Navigation("Article");
 
@@ -463,7 +451,7 @@ namespace MyBlogDAL.Migrations
                 {
                     b.HasOne("MyBlogDAL.Entities.User", "Creator")
                         .WithMany()
-                        .HasForeignKey("CreatorId1");
+                        .HasForeignKey("CreatorId");
 
                     b.Navigation("Creator");
                 });

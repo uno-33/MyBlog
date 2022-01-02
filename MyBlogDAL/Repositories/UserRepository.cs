@@ -34,6 +34,17 @@ namespace MyBlogDAL.Repositories
             return false;
         }
 
+        public async Task<bool> DeleteById(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                var result = await _userManager.DeleteAsync(user);
+                return result.Succeeded;
+            }
+            return false;
+        }
+
         public IQueryable<Article> GetArticlesByUserId(string id)
         {
             throw new NotImplementedException();

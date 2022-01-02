@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MyBlogDAL.Entities
+namespace MyBlogBLL.Models
 {
-    public class Article : BaseEntity
+    public class ArticleModel
     {
+        public int Id { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
         public DateTime DateOfCreation { get; set; }
-
         public int BlogId { get; set; }
-        public virtual Blog Blog { get; set; }
         public string CreatorId { get; set; }
-        public virtual User Creator { get; set; }
-        public virtual ICollection<Comment> Comments { get; set; }
-        public virtual ICollection<Tag> Tags { get; set; }
+        public string CreatorName { get; set; }
+        public ICollection<int> CommentsIds { get; set; }
+        public ICollection<int> TagsIds { get; set; }
+
     }
 }

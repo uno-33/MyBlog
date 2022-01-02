@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MyBlogDAL.Entities
+namespace MyBlogBLL.Models
 {
-    public class Comment : BaseEntity
+    public class CommentModel
     {
+        public int Id { get; set; }
         public string Content { get; set; }
         public DateTime DateOfCreation { get; set; }
-
         public string AuthorId { get; set; }
-        public virtual User Author { get; set; }
+        public string AuthorName { get; set; }
         public int ArticleId { get; set; }
-        public virtual Article Article { get; set; }
     }
 }

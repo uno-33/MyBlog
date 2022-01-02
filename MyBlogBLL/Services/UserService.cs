@@ -18,7 +18,7 @@ namespace MyBlogBLL.Services
 
         public async Task<bool> AddUserToRoleAsync(string id, string role)
         {
-            return await _userRepository.AddUserToRoleAsync(id, role); ;
+            return await _userRepository.AddUserToRoleAsync(id, role);
         }
     }
 }
