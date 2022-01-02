@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using MyBlogDAL.Entities;
 using MyBlogDAL.Interfaces;
 using System;
@@ -12,39 +13,28 @@ namespace MyBlogDAL.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly MyBlogDBContext _context;
+        private readonly UserManager<User> _userManager;
         private readonly DbSet<User> _users;
 
-        public UserRepository(MyBlogDBContext context)
+        public UserRepository(MyBlogDBContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
             _users = context.Users;
         }
-        public Task AddAsync(User entity)
+
+        public async Task<bool> AddUserToRoleAsync(string id, string role)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                var result = await _userManager.AddToRoleAsync(user, role);
+                return result.Succeeded;
+            }
+            return false;
         }
 
-        public User Authenticate(string username, string password)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(User entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<User> FindAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<Article> GetArticlesByUserId(int id)
+        public IQueryable<Article> GetArticlesByUserId(string id)
         {
             throw new NotImplementedException();
         }
@@ -54,17 +44,7 @@ namespace MyBlogDAL.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<User> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
         public IQueryable<Comment> GetCommentsByUserId(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(User entity)
         {
             throw new NotImplementedException();
         }

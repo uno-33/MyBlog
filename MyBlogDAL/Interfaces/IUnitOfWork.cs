@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MyBlogDAL.Interfaces
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
         IUserRepository UserRepository { get; }
         IBlogRepository BlogRepository { get; }

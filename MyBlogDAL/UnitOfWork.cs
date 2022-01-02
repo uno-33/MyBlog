@@ -1,4 +1,6 @@
-﻿using MyBlogDAL.Interfaces;
+﻿using Microsoft.AspNetCore.Identity;
+using MyBlogDAL.Entities;
+using MyBlogDAL.Interfaces;
 using MyBlogDAL.Repositories;
 using System;
 using System.Collections.Generic;
@@ -10,15 +12,17 @@ namespace MyBlogDAL
     public class UnitOfWork : IUnitOfWork
     {
         private readonly MyBlogDBContext _context;
-        IUserRepository _userRepository;
-        IBlogRepository _blogRepository;
-        IArticleRepository _articleRepository;
-        ICommentRepository _commentRepository;
-        ITagRepository _tagRepository;
+        private readonly UserManager<User> _userManager;
+        private IUserRepository _userRepository;
+        private IBlogRepository _blogRepository;
+        private IArticleRepository _articleRepository;
+        private ICommentRepository _commentRepository;
+        private ITagRepository _tagRepository;
 
-        public UnitOfWork(MyBlogDBContext context)
+        public UnitOfWork(MyBlogDBContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
         public IUserRepository UserRepository
         {
@@ -26,7 +30,7 @@ namespace MyBlogDAL
             {
                 if (_userRepository == null)
                 {
-                    _userRepository = new UserRepository(_context);
+                    _userRepository = new UserRepository(_context, _userManager);
                 }
                 return _userRepository;
             }
@@ -84,5 +88,26 @@ namespace MyBlogDAL
         {
             return await _context.SaveChangesAsync();
         }
+
+        #region Dispose
+        private bool _disposedValue;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposedValue)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+                _disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
     }
+    #endregion
 }

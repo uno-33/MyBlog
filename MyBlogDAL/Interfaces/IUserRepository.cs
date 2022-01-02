@@ -3,14 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MyBlogDAL.Interfaces
 {
-    public interface IUserRepository : IRepository<User>
+    public interface IUserRepository
     {
-        User Authenticate(string username, string password);
-        IQueryable<Comment> GetCommentsByUserId(int id);
-        IQueryable<Article> GetArticlesByUserId(int id);
+        Task<bool> AddUserToRoleAsync(string id, string role);
+        IQueryable<Article> GetArticlesByUserId(string id);
         IQueryable<Blog> GetBlogsByUserId(int id);
+        IQueryable<Comment> GetCommentsByUserId(int id);
     }
 }

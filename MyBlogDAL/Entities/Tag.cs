@@ -8,6 +8,7 @@ namespace MyBlogDAL.Entities
     {
         public string Text { get; set; }
 
+        public int CreatorId { get; set; }
         public virtual User Creator { get; set; }
         public virtual ICollection<Article> Articles { get; set; }
     }
