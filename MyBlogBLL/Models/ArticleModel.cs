@@ -16,5 +16,17 @@ namespace MyBlogBLL.Models
         public ICollection<int> CommentsIds { get; set; }
         public ICollection<int> TagsIds { get; set; }
 
+        public bool IsValid()
+        {
+            if (Title.Length == 0 || 
+                Content.Length == 0 || 
+                DateOfCreation == DateTime.MinValue || 
+                CreatorId.Length == 0 || 
+                CreatorName.Length == 0)
+                return false;
+
+            return true;
+        }
+
     }
 }

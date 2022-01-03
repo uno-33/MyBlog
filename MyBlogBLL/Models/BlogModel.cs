@@ -11,5 +11,13 @@ namespace MyBlogBLL.Models
         public string CreatorId { get; set; }
         public string CreatorName { get; set; }
         public ICollection<int> ArticlesIds { get; set; }
+
+        public bool IsValid()
+        {
+            if (Name.Length == 0 || CreatorId.Length == 0 || CreatorName.Length == 0)
+                return false;
+
+            return true;
+        }
     }
 }

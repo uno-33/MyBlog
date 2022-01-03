@@ -12,5 +12,13 @@ namespace MyBlogBLL.Models
         public string AuthorId { get; set; }
         public string AuthorName { get; set; }
         public int ArticleId { get; set; }
+
+        public bool IsValid()
+        {
+            if (Content.Length == 0 || DateOfCreation == DateTime.MinValue || AuthorId.Length == 0 || AuthorName.Length == 0)
+                return false;
+
+            return true;
+        }
     }
 }

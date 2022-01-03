@@ -30,17 +30,6 @@ namespace MyBlogDAL.Repositories
             _dbSet.Remove(entity);
         }
 
-        public async Task<bool> DeleteByIdAsync(int id)
-        {
-            var entity = await GetByIdAsync(id);
-            if (entity == null)
-            {
-                return false;
-            }
-            _dbSet.Remove(entity);
-            return true;
-        }
-
         public IQueryable<Comment> FindAll()
         {
             return _dbSet.AsQueryable();
