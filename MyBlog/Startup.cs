@@ -141,6 +141,19 @@ namespace MyBlog
             services.AddAutoMapper(typeof(AutomapperProfile));
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserService, UserService>();
+            
+            services
+                .AddScoped<IArticleRepository, ArticleRepository>()
+                .AddScoped<IBlogRepository, BlogRepository>()
+                .AddScoped<ICommentRepository, CommentRepository>()
+                .AddScoped<ITagRepository, TagRepository>()
+                .AddScoped<IUnitOfWork, UnitOfWork>();
+            services
+                .AddScoped<IArticleService, ArticleService>()
+                .AddScoped<IBlogService, BlogService>()
+                .AddScoped<ICommentService, CommentService>()
+                .AddScoped<ITagService, TagService>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

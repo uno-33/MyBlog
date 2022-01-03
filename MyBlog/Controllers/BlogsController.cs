@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyBlogBLL.Models;
+using MyBlogBLL.Services;
+using MyBlogBLL.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,18 +17,29 @@ namespace MyBlog.Controllers
     [Produces("application/json")]
     public class BlogsController : ControllerBase
     {
+        private readonly IBlogService _blogService;
+
+        public BlogsController(IBlogService blogService)
+        {
+            _blogService = blogService;
+        }
         // GET: api/<BlogsController>
         [HttpGet]
         public ActionResult<IEnumerable<BlogModel>> GetAll()
         {
-            throw new NotImplementedException();
+            return Ok(_blogService.GetAll());
         }
 
         // GET api/<BlogsController>/5
         [HttpGet("{id}")]
-        public ActionResult<BlogModel> GetById(int id)
+        public async Task<ActionResult<BlogModel>> GetById(int id)
         {
-            throw new NotImplementedException();
+            var blog = await _blogService.GetByIdAsync(id);
+
+            if (blog == null)
+                return NotFound();
+
+            return Ok(blog);
         }
 
         // POST api/<BlogsController>
@@ -34,15 +47,47 @@ namespace MyBlog.Controllers
         [Authorize]
         public async Task<ActionResult<BlogModel>> Add([FromBody] BlogModel blogModel)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _blogService.AddAsync(blogModel);
+                return Ok();
+            }
+            catch (BlogException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // PUT api/<BlogsController>/5
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<ActionResult<BlogModel>> Update(int id, [FromBody] BlogModel blogModel)
+        public ActionResult<BlogModel> Update(int id, [FromBody] BlogModel blogModel)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _blogService.Update(blogModel);
+                return Ok();
+            }
+            catch (BlogException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // DELETE api/<BlogsController>/5
@@ -50,14 +95,24 @@ namespace MyBlog.Controllers
         [Authorize]
         public async Task<ActionResult> DeleteById(int id)
         {
-            throw new NotImplementedException();
+            var result = await _blogService.DeleteByIdAsync(id);
+
+            if (result)
+                return Ok();
+
+            return NotFound();
         }
 
         [HttpGet]
         [Route("{id}/articles")]
-        public ActionResult<IEnumerable<ArticleModel>> GetAllArticlesByBlogId(int id)
+        public async Task<ActionResult<IEnumerable<ArticleModel>>> GetArticlesByBlogId(int id)
         {
-            throw new NotImplementedException();
+            var articles = await _blogService.GetArticlesByBlogId(id);
+
+            if (articles == null)
+                return NotFound();
+
+            return Ok(articles);
         }
     }
 }

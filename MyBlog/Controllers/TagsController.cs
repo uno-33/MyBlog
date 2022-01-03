@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MyBlogBLL.Models;
+using MyBlogBLL.Services;
+using MyBlogBLL.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,46 +16,102 @@ namespace MyBlog.Controllers
     [ApiController]
     public class TagsController : ControllerBase
     {
+        private readonly TagService _tagService;
+
+        public TagsController(TagService tagService)
+        {
+            _tagService = tagService;
+        }
         // GET: api/<TagsController>
         [HttpGet]
         public ActionResult<IEnumerable<TagModel>> GetAll()
         {
-            throw new NotImplementedException();
+            return Ok(_tagService.GetAll());
         }
 
         // GET api/<TagsController>/5
         [HttpGet("{id}")]
-        public ActionResult<TagModel> GetById(int id)
+        public async Task<ActionResult<TagModel>> GetById(int id)
         {
-            throw new NotImplementedException();
+            var tag = await _tagService.GetByIdAsync(id);
+
+            if (tag == null)
+                return NotFound();
+
+            return Ok(tag);
         }
 
         // GET api/<TagsController>/5
         [HttpGet("{name}")]
-        public ActionResult<TagModel> GetByName(string name)
+        public async Task<ActionResult<TagModel>> GetByName(string name)
         {
-            throw new NotImplementedException();
+            var tag = await _tagService.GetByNameAsync(name);
+
+            if (tag == null)
+                return NotFound();
+
+            return Ok(tag);
         }
 
         // POST api/<TagsController>
         [HttpPost]
-        public ActionResult<TagModel> Create([FromBody] string value)
+        [Authorize]
+        public async Task<ActionResult<TagModel>> Create([FromBody] TagModel tagModel)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _tagService.AddAsync(tagModel);
+                return Ok();
+            }
+            catch (BlogException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // PUT api/<TagsController>/5
         [HttpPut("{id}")]
-        public ActionResult<TagModel> Update(int id, [FromBody] string value)
+        [Authorize]
+        public ActionResult<TagModel> Update(int id, [FromBody] TagModel tagModel)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _tagService.Update(tagModel);
+                return Ok();
+            }
+            catch (BlogException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // DELETE api/<TagsController>/5
         [HttpDelete("{id}")]
-        public ActionResult DeleteById(int id)
+        [Authorize]
+        public async Task<ActionResult> DeleteById(int id)
         {
-            throw new NotImplementedException();
+            var result = await _tagService.DeleteByIdAsync(id);
+
+            if (result)
+                return Ok();
+
+            return NotFound();
         }
     }
 }

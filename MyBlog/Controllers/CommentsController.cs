@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyBlogBLL.Models;
+using MyBlogBLL.Services;
+using MyBlogBLL.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,27 +16,54 @@ namespace MyBlog.Controllers
     [ApiController]
     public class CommentsController : ControllerBase
     {
+        private readonly ICommentService _commentService;
+
+        public CommentsController(ICommentService commentService)
+        {
+            _commentService = commentService;
+        }
         // GET: api/<CommentsController>
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public ActionResult<IEnumerable<CommentModel>> GetAll()
         {
-            throw new NotImplementedException();
+            return Ok(_commentService.GetAll());
         }
 
         // GET api/<CommentsController>/5
         [HttpGet("{id}")]
-        public ActionResult<CommentModel> GetById(int id)
+        public async Task<ActionResult<CommentModel>> GetById(int id)
         {
-            throw new NotImplementedException();
+            var comment = await _commentService.GetByIdAsync(id);
+
+            if (comment == null)
+                return NotFound();
+
+            return Ok(comment);
         }
 
         // POST api/<CommentsController>
         [HttpPost]
         [Authorize]
-        public ActionResult<CommentModel> Create([FromBody] CommentModel commentModel)
+        public async Task<ActionResult<CommentModel>> Create([FromBody] CommentModel commentModel)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _commentService.AddAsync(commentModel);
+                return Ok();
+            }
+            catch (BlogException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // PUT api/<CommentsController>/5
@@ -42,15 +71,36 @@ namespace MyBlog.Controllers
         [Authorize]
         public ActionResult<CommentModel> Update(int id, [FromBody] CommentModel commentModel)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _commentService.Update(commentModel);
+                return Ok();
+            }
+            catch (BlogException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // DELETE api/<CommentsController>/5
         [HttpDelete("{id}")]
         [Authorize]
-        public ActionResult DeleteById(int id)
+        public async Task<ActionResult> DeleteById(int id)
         {
-            throw new NotImplementedException();
+            var result = await _commentService.DeleteByIdAsync(id);
+
+            if (result)
+                return Ok();
+
+            return NotFound();
         }
     }
 }

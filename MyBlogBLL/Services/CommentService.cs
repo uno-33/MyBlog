@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MyBlogBLL.Services
 {
-    public class CommentService
+    public class CommentService : ICommentService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MyBlogBLL.Services
 {
-    public class BlogService
+    public class BlogService : IBlogService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
