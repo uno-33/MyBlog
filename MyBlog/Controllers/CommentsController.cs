@@ -12,16 +12,28 @@ using System.Threading.Tasks;
 
 namespace MyBlog.Controllers
 {
+    /// <summary>
+    /// Controller for comment service
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class CommentsController : ControllerBase
     {
         private readonly ICommentService _commentService;
 
+        /// <summary>
+        /// Comment controller constructor
+        /// </summary>
+        /// <param name="commentService">Implementation of commentService</param>
         public CommentsController(ICommentService commentService)
         {
             _commentService = commentService;
         }
+
+        /// <summary>
+        /// Gets all comments
+        /// </summary>
+        /// <returns>IEnumerable of CommentModel</returns>
         // GET: api/<CommentsController>
         [HttpGet]
         [Authorize(Roles = "Admin")]
@@ -30,6 +42,11 @@ namespace MyBlog.Controllers
             return Ok(_commentService.GetAll());
         }
 
+        /// <summary>
+        /// Get comment by id
+        /// </summary>
+        /// <param name="id">Comment id</param>
+        /// <returns>CommentModel or NotFound if comment with such id doesn't exist</returns>
         // GET api/<CommentsController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<CommentModel>> GetById(int id)
@@ -42,10 +59,15 @@ namespace MyBlog.Controllers
             return Ok(comment);
         }
 
+        /// <summary>
+        /// Creates new comment
+        /// </summary>
+        /// <param name="commentModel">CommentModel to create</param>
+        /// <returns>OK if successful, BadRequest if not</returns>
         // POST api/<CommentsController>
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<CommentModel>> Create([FromBody] CommentModel commentModel)
+        public async Task<ActionResult> Create([FromBody] CommentModel commentModel)
         {
             try
             {
@@ -66,10 +88,16 @@ namespace MyBlog.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates comment
+        /// </summary>
+        /// <param name="id">Comment id</param>
+        /// <param name="commentModel">CommentModel to update</param>
+        /// <returns>OK if successful, BadRequest if not</returns>
         // PUT api/<CommentsController>/5
         [HttpPut("{id}")]
         [Authorize]
-        public ActionResult<CommentModel> Update(int id, [FromBody] CommentModel commentModel)
+        public ActionResult Update(int id, [FromBody] CommentModel commentModel)
         {
             try
             {
@@ -90,6 +118,11 @@ namespace MyBlog.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes comment from DB
+        /// </summary>
+        /// <param name="id">Comment id</param>
+        /// <returns>OK is successful, NotFound if article with such id doesn't exist in DB</returns>
         // DELETE api/<CommentsController>/5
         [HttpDelete("{id}")]
         [Authorize]

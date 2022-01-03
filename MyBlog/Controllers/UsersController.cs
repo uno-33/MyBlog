@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace MyBlog.Controllers
 {
+    /// <summary>
+    /// Controller for user service
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     [Produces("application/json")]
@@ -17,14 +20,24 @@ namespace MyBlog.Controllers
     {
         private readonly IUserService _userService;
 
+        /// <summary>
+        /// Users controller constructor
+        /// </summary>
+        /// <param name="userService"></param>
         public UsersController(IUserService userService)
         {
             _userService = userService;
         }
 
+        /// <summary>
+        /// Adds user to role
+        /// </summary>
+        /// <param name="id">User id</param>
+        /// <param name="role">Role name</param>
+        /// <returns>OK if successful, NotFound if either user or role isn't in DB</returns>
         [HttpPost("addtorole")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<bool>> AddUserToRoleAsync(string id, string role)
+        public async Task<ActionResult> AddUserToRoleAsync(string id, string role)
         {
             var result = false;
             try
@@ -42,6 +55,12 @@ namespace MyBlog.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Removes user from role
+        /// </summary>
+        /// <param name="id">User id</param>
+        /// <param name="role">Role name</param>
+        /// <returns>OK if successful, NotFound if either user or role isn't in DB</returns>
         [HttpPost("removefromrole")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<bool>> RemoveUserFromRole(string id, string role)
@@ -62,6 +81,11 @@ namespace MyBlog.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Gets user by id
+        /// </summary>
+        /// <param name="id">User id</param>
+        /// <returns>UserModel</returns>
         // GET: api/users/5
         [HttpGet("{id}")]
         [Authorize]
@@ -78,6 +102,10 @@ namespace MyBlog.Controllers
             return Ok(model);
         }
 
+        /// <summary>
+        /// Gets all users
+        /// </summary>
+        /// <returns>IEnumerable of UserModel</returns>
         // GET: api/users/
         [HttpGet]
         [Authorize(Roles = "Admin")]
@@ -90,6 +118,12 @@ namespace MyBlog.Controllers
             return Ok(users);
         }
 
+        /// <summary>
+        /// Updates user
+        /// </summary>
+        /// <param name="id">User id</param>
+        /// <param name="model">UserModel to update</param>
+        /// <returns></returns>
         // PUT: api/users/5
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
@@ -103,6 +137,11 @@ namespace MyBlog.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Deletes user from DB
+        /// </summary>
+        /// <param name="id">User id</param>
+        /// <returns>OK if successful, NotFound if user with such id doesn't exist</returns>
         // DELETE: api/users/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
@@ -116,6 +155,11 @@ namespace MyBlog.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Gets all comments made by user
+        /// </summary>
+        /// <param name="id">User id</param>
+        /// <returns>IEnumerable of CommentModel or NotFound if user with such id doesn't exist</returns>
         // GET: api/users/5/comments
         [HttpGet]
         [Route("{id}/comments")]
@@ -130,6 +174,11 @@ namespace MyBlog.Controllers
             return Ok(comments);
         }
 
+        /// <summary>
+        /// Gets all articles created by user
+        /// </summary>
+        /// <param name="id">User id</param>
+        /// <returns>IEnumerable of ArticleModel or NotFound if user with such id doesn't exist</returns>
         // GET: api/users/5/articles
         [HttpGet]
         [Route("{id}/articles")]
@@ -144,6 +193,11 @@ namespace MyBlog.Controllers
             return Ok(articles);
         }
 
+        /// <summary>
+        /// Gets all blogs created by user
+        /// </summary>
+        /// <param name="id">User id</param>
+        /// <returns>IEnumerable of BlogModel or NotFound if user with such id doesn't exist</returns>
         // GET: api/users/5/blogs
         [HttpGet]
         [Route("{id}/blogs")]

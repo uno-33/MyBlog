@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace MyBlog.Controllers
 {
+    /// <summary>
+    /// Controller for blog service
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     [Produces("application/json")]
@@ -19,10 +22,19 @@ namespace MyBlog.Controllers
     {
         private readonly IBlogService _blogService;
 
+        /// <summary>
+        /// Blog controller constructor
+        /// </summary>
+        /// <param name="blogService">Implementation of blogService</param>
         public BlogsController(IBlogService blogService)
         {
             _blogService = blogService;
         }
+
+        /// <summary>
+        /// Gets all blogs
+        /// </summary>
+        /// <returns>IEnumerable of BlogModel</returns>
         // GET: api/<BlogsController>
         [HttpGet]
         public ActionResult<IEnumerable<BlogModel>> GetAll()
@@ -30,6 +42,11 @@ namespace MyBlog.Controllers
             return Ok(_blogService.GetAll());
         }
 
+        /// <summary>
+        /// Gets blog by id
+        /// </summary>
+        /// <param name="id">Blog id</param>
+        /// <returns>BlogModel or NotFound if blog with such id doesn't exist</returns>
         // GET api/<BlogsController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<BlogModel>> GetById(int id)
@@ -42,6 +59,11 @@ namespace MyBlog.Controllers
             return Ok(blog);
         }
 
+        /// <summary>
+        /// Creates new blog
+        /// </summary>
+        /// <param name="blogModel">BlogModel to create in DB</param>
+        /// <returns>OK if successful, BadRequest if not</returns>
         // POST api/<BlogsController>
         [HttpPost]
         [Authorize]
@@ -66,6 +88,12 @@ namespace MyBlog.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates blog
+        /// </summary>
+        /// <param name="id">Blog id</param>
+        /// <param name="blogModel">BlogModel to update</param>
+        /// <returns>OK if successful, BadRequest if not</returns>
         // PUT api/<BlogsController>/5
         [HttpPut("{id}")]
         [Authorize]
@@ -90,6 +118,11 @@ namespace MyBlog.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes blog from DB
+        /// </summary>
+        /// <param name="id">Blog id</param>
+        /// <returns>OK is successful, NotFound if blog with such id doesn't exist in DB</returns>
         // DELETE api/<BlogsController>/5
         [HttpDelete("{id}")]
         [Authorize]
@@ -103,6 +136,11 @@ namespace MyBlog.Controllers
             return NotFound();
         }
 
+        /// <summary>
+        /// Gets all articles of certain blog
+        /// </summary>
+        /// <param name="id">Blog id</param>
+        /// <returns>IEnumerable of ArticleModel or NotFound if blog with such id doesn't exist in DB</returns>
         [HttpGet]
         [Route("{id}/articles")]
         public async Task<ActionResult<IEnumerable<ArticleModel>>> GetArticlesByBlogId(int id)

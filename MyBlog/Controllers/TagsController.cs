@@ -12,16 +12,28 @@ using System.Threading.Tasks;
 
 namespace MyBlog.Controllers
 {
+    /// <summary>
+    /// Controller for tag service
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class TagsController : ControllerBase
     {
-        private readonly TagService _tagService;
+        private readonly ITagService _tagService;
 
-        public TagsController(TagService tagService)
+        /// <summary>
+        /// Tag controller constructor
+        /// </summary>
+        /// <param name="tagService">Implementation of tagService</param>
+        public TagsController(ITagService tagService)
         {
             _tagService = tagService;
         }
+
+        /// <summary>
+        /// Gets all tags
+        /// </summary>
+        /// <returns>IEnumerable of TagModel</returns>
         // GET: api/<TagsController>
         [HttpGet]
         public ActionResult<IEnumerable<TagModel>> GetAll()
@@ -29,6 +41,11 @@ namespace MyBlog.Controllers
             return Ok(_tagService.GetAll());
         }
 
+        /// <summary>
+        /// Get tag by id
+        /// </summary>
+        /// <param name="id">Tag id</param>
+        /// <returns>TagModel or NotFound if tag with such id doesn't exist</returns>
         // GET api/<TagsController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TagModel>> GetById(int id)
@@ -41,6 +58,11 @@ namespace MyBlog.Controllers
             return Ok(tag);
         }
 
+        /// <summary>
+        /// Gets tag by name
+        /// </summary>
+        /// <param name="name">Tag name</param>
+        /// <returns>TagModel</returns>
         // GET api/<TagsController>/5
         [HttpGet("{name}")]
         public async Task<ActionResult<TagModel>> GetByName(string name)
@@ -53,10 +75,15 @@ namespace MyBlog.Controllers
             return Ok(tag);
         }
 
+        /// <summary>
+        /// Creates new tag
+        /// </summary>
+        /// <param name="tagModel">TagModel to create</param>
+        /// <returns>OK if successful, BadRequest if not</returns>
         // POST api/<TagsController>
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<TagModel>> Create([FromBody] TagModel tagModel)
+        public async Task<ActionResult> Create([FromBody] TagModel tagModel)
         {
             try
             {
@@ -77,6 +104,12 @@ namespace MyBlog.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates tag
+        /// </summary>
+        /// <param name="id">Tag id</param>
+        /// <param name="tagModel">TagModel to update</param>
+        /// <returns>OK if successful, BadRequest if not</returns>
         // PUT api/<TagsController>/5
         [HttpPut("{id}")]
         [Authorize]
@@ -101,6 +134,11 @@ namespace MyBlog.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes tag from DB
+        /// </summary>
+        /// <param name="id">Tag id</param>
+        /// <returns>OK is successful, NotFound if tag with such id doesn't exist in DB</returns>
         // DELETE api/<TagsController>/5
         [HttpDelete("{id}")]
         [Authorize]

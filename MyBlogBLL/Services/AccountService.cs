@@ -19,12 +19,21 @@ using System.Threading.Tasks;
 
 namespace MyBlogBLL.Services
 {
+    /// <summary>
+    /// Class representing login system
+    /// </summary>
     public class AccountService : IAccountService
     {
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
         private readonly AuthSettings _authSettings;
 
+        /// <summary>
+        /// AccountService controller
+        /// </summary>
+        /// <param name="userManager">Implementation of UserManager</param>
+        /// <param name="mapper">Implementation of IMapper</param>
+        /// <param name="authSettings">Implementation of IOptions<AuthSettings></param>
         public AccountService(
             UserManager<User> userManager, 
             IMapper mapper, 
@@ -35,6 +44,11 @@ namespace MyBlogBLL.Services
             _authSettings = authSettings.Value;
         }
 
+        /// <summary>
+        /// Registers user in DB
+        /// </summary>
+        /// <param name="model">Model containing username and password</param>
+        /// <returns>true if successful, false if not</returns>
         public async Task<bool> RegisterAsync(RegisterModel model)
         {
             User user = new User { UserName = model.UserName, DateOfCreation = DateTime.Now };
@@ -54,6 +68,11 @@ namespace MyBlogBLL.Services
             return result.Succeeded;
         }
 
+        /// <summary>
+        /// Signs in user in DB
+        /// </summary>
+        /// <param name="model">Model containing username and password</param>
+        /// <returns>UserModel with JWT inside</returns>
         public async Task<UserModel> LoginAsync(LoginModel model)
         {
             var user = await GetUserByLoginModelAsync(model);

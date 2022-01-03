@@ -37,7 +37,10 @@ namespace MyBlog
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// Adds services to the DI
+        /// </summary>
+        /// <param name="services">Implementation of services</param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
@@ -156,7 +159,11 @@ namespace MyBlog
             
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// Configures HTTP request pipeline
+        /// </summary>
+        /// <param name="app">Implementation of IApplicationBuilder</param>
+        /// <param name="env">Implementation of IWebHostEnvironment</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -185,6 +192,11 @@ namespace MyBlog
             CreateRoles(app.ApplicationServices).Wait();
         }
 
+        /// <summary>
+        /// Seeds roles to DB
+        /// </summary>
+        /// <param name="serviceProvider">Implementation of IServiceProvider</param>
+        /// <returns></returns>
         private async Task CreateRoles(IServiceProvider serviceProvider)
         {
             using(var scope = serviceProvider.CreateScope())

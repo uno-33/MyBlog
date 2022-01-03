@@ -11,17 +11,30 @@ using System.Threading.Tasks;
 
 namespace MyBlogBLL.Services
 {
+    /// <summary>
+    /// Class representing manager of blogs
+    /// </summary>
     public class BlogService : IBlogService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// BlogService controller
+        /// </summary>
+        /// <param name="unitOfWork">Implementation of IUnitOfWork</param>
+        /// <param name="mapper">Implementation of IMapper</param>
         public BlogService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Adds blog to DB
+        /// </summary>
+        /// <param name="model">BlogModel to add</param>
+        /// <returns></returns>
         public async Task AddAsync(BlogModel model)
         {
             ValidateBlogModel(model);
@@ -32,6 +45,10 @@ namespace MyBlogBLL.Services
             await _unitOfWork.SaveAsync();
         }
 
+        /// <summary>
+        /// Deletes blog from DB by model
+        /// </summary>
+        /// <param name="model">BlogModel to delete</param>
         public void Delete(BlogModel model)
         {
             ValidateBlogModel(model);
@@ -42,6 +59,11 @@ namespace MyBlogBLL.Services
             _unitOfWork.SaveAsync();
         }
 
+        /// <summary>
+        /// Deletes blog from DB by id
+        /// </summary>
+        /// <param name="id">Blog id</param>
+        /// <returns>true if successful, false if blog not found</returns>
         public async Task<bool> DeleteByIdAsync(int id)
         {
             var entity = await _unitOfWork.BlogRepository.GetByIdAsync(id);
@@ -53,6 +75,10 @@ namespace MyBlogBLL.Services
             return true;
         }
 
+        /// <summary>
+        /// Gets all blogs
+        /// </summary>
+        /// <returns>IEnumerable of BlogModel</returns>
         public IEnumerable<BlogModel> GetAll()
         {
             var entities = _unitOfWork.BlogRepository.FindAll();
@@ -60,6 +86,11 @@ namespace MyBlogBLL.Services
             return _mapper.Map<IEnumerable<BlogModel>>(entities);
         }
 
+        /// <summary>
+        /// Gets all articles of this blog
+        /// </summary>
+        /// <param name="id">Blog id</param>
+        /// <returns>IEnumerable of ArticleModel</returns>
         public async Task<IEnumerable<ArticleModel>> GetArticlesByBlogId(int id)
         {
             var entities = await _unitOfWork.BlogRepository.GetArticlesByBlogId(id);
@@ -67,12 +98,21 @@ namespace MyBlogBLL.Services
             return _mapper.Map<IEnumerable<ArticleModel>>(entities);
         }
 
+        /// <summary>
+        /// Gets blog by id
+        /// </summary>
+        /// <param name="id">Blog id</param>
+        /// <returns>BlogModel</returns>
         public async Task<BlogModel> GetByIdAsync(int id)
         {
             var entity = await _unitOfWork.BlogRepository.GetByIdAsync(id);
             return _mapper.Map<BlogModel>(entity);
         }
 
+        /// <summary>
+        /// Updates blog
+        /// </summary>
+        /// <param name="model">BlogModel to update</param>
         public void Update(BlogModel model)
         {
             ValidateBlogModel(model);

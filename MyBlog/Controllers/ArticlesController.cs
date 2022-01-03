@@ -12,16 +12,27 @@ using System.Threading.Tasks;
 
 namespace MyBlog.Controllers
 {
+    /// <summary>
+    /// Controller for article service
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class ArticlesController : ControllerBase
     {
         private readonly IArticleService _articleService;
 
+        /// <summary>
+        /// Article controller constructor
+        /// </summary>
+        /// <param name="articleService">Implementation of articleService</param>
         public ArticlesController(IArticleService articleService)
         {
             _articleService = articleService;
         }
+        /// <summary>
+        /// Gets all articles
+        /// </summary>
+        /// <returns>IEnumerable of ArticleModel</returns>
         // GET: api/<ArticlesController>
         [HttpGet]
         public ActionResult<IEnumerable<ArticleModel>> GetAll()
@@ -29,6 +40,11 @@ namespace MyBlog.Controllers
             return Ok(_articleService.GetAll());
         }
 
+        /// <summary>
+        /// Gets article by id
+        /// </summary>
+        /// <param name="id">Article id</param>
+        /// <returns>ArticleModel or NotFound if blog with such id doesn't exist</returns>
         // GET api/<ArticlesController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ArticleModel>> GetById(int id)
@@ -41,6 +57,11 @@ namespace MyBlog.Controllers
             return Ok(article);
         }
 
+        /// <summary>
+        /// Creates new article
+        /// </summary>
+        /// <param name="articleModel">ArticleModel to create in DB</param>
+        /// <returns>OK if successful, BadRequest if not</returns>
         // POST api/<ArticlesController>
         [HttpPost]
         [Authorize]
@@ -65,10 +86,16 @@ namespace MyBlog.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates article
+        /// </summary>
+        /// <param name="id">Article id</param>
+        /// <param name="articleModel">ArticleModel to update</param>
+        /// <returns>OK if successful, BadRequest if not</returns>
         // PUT api/<ArticlesController>/5
         [HttpPut("{id}")]
         [Authorize]
-        public ActionResult<ArticleModel> Update(int id, [FromBody] ArticleModel articleModel)
+        public ActionResult Update(int id, [FromBody] ArticleModel articleModel)
         {
             try
             {
@@ -89,6 +116,11 @@ namespace MyBlog.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes article from DB
+        /// </summary>
+        /// <param name="id">Article id</param>
+        /// <returns>OK is successful, NotFound if article with such id doesn't exist in DB</returns>
         // DELETE api/<ArticlesController>/5
         [HttpDelete("{id}")]
         [Authorize]
@@ -102,6 +134,11 @@ namespace MyBlog.Controllers
             return NotFound();
         }
 
+        /// <summary>
+        /// Gets all comments from ceratin article
+        /// </summary>
+        /// <param name="id">Article id</param>
+        /// <returns>IEnumerable of CommentModel or NotFound if article with such id doesn't exist in DB</returns>
         // GET: api/articles/5/comments
         [HttpGet]
         [Route("{id}/comments")]
@@ -115,6 +152,11 @@ namespace MyBlog.Controllers
             return Ok(comments);
         }
 
+        /// <summary>
+        /// Gets all tags from certain article
+        /// </summary>
+        /// <param name="id">Article id</param>
+        /// <returns>IEnumerable of TagModel or NotFound if article with such id doesn't exist in DB</returns>
         // GET: api/articles/5/tags
         [HttpGet]
         [Route("{id}/tags")]
