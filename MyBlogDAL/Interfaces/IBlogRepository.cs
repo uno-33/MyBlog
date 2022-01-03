@@ -3,11 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MyBlogDAL.Interfaces
 {
     public interface IBlogRepository : IRepository<Blog>
     {
-        IQueryable<Article> GetArticlesByBlogId(int id);
+        Task<IQueryable<Article>> GetArticlesByBlogId(int id);
     }
 }

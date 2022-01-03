@@ -1,4 +1,6 @@
-﻿using MyBlogBLL.Interfaces;
+﻿using Microsoft.AspNetCore.Identity;
+using MyBlogBLL.Interfaces;
+using MyBlogDAL.Entities;
 using MyBlogDAL.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -9,16 +11,22 @@ namespace MyBlogBLL.Services
 {
     public class UserService : IUserService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly UserManager<User> _userManager;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(UserManager<User> userManager)
         {
-            _userRepository = userRepository;
+            _userManager = userManager;
         }
 
         public async Task<bool> AddUserToRoleAsync(string id, string role)
         {
-            return await _userRepository.AddUserToRoleAsync(id, role);
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                return false;
+
+            var result = await _userManager.AddToRoleAsync(user, role);
+
+            return result.Succeeded;
         }
     }
 }

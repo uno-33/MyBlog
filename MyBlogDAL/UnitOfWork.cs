@@ -12,28 +12,14 @@ namespace MyBlogDAL
     public class UnitOfWork : IUnitOfWork
     {
         private readonly MyBlogDBContext _context;
-        private readonly UserManager<User> _userManager;
-        private IUserRepository _userRepository;
         private IBlogRepository _blogRepository;
         private IArticleRepository _articleRepository;
         private ICommentRepository _commentRepository;
         private ITagRepository _tagRepository;
 
-        public UnitOfWork(MyBlogDBContext context, UserManager<User> userManager)
+        public UnitOfWork(MyBlogDBContext context)
         {
             _context = context;
-            _userManager = userManager;
-        }
-        public IUserRepository UserRepository
-        {
-            get
-            {
-                if (_userRepository == null)
-                {
-                    _userRepository = new UserRepository(_context, _userManager);
-                }
-                return _userRepository;
-            }
         }
 
         public IBlogRepository BlogRepository

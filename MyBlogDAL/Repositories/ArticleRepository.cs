@@ -11,52 +11,69 @@ namespace MyBlogDAL.Repositories
 {
     public class ArticleRepository : IArticleRepository
     {
-        private readonly MyBlogDBContext _context;
-        private readonly DbSet<Article> _articles;
+        private readonly MyBlogDBContext _dbContext;
+        private readonly DbSet<Article> _dbSet;
 
         public ArticleRepository(MyBlogDBContext context)
         {
-            _context = context;
-            _articles = context.Articles;
+            _dbContext = context;
+            _dbSet = context.Articles;
         }
-        public Task AddAsync(Article entity)
+        public async Task AddAsync(Article entity)
         {
-            throw new NotImplementedException();
+            await _dbSet.AddAsync(entity);
         }
 
         public void Delete(Article entity)
         {
-            throw new NotImplementedException();
+            _dbSet.Remove(entity);
         }
 
-        public Task DeleteByIdAsync(int id)
+        public async Task<bool> DeleteByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var entity = await GetByIdAsync(id);
+            if (entity == null)
+            {
+                return false;
+            }
+            _dbSet.Remove(entity);
+            return true;
         }
 
         public IQueryable<Article> FindAll()
         {
-            throw new NotImplementedException();
+            return _dbSet.AsQueryable();
         }
 
-        public Task<Article> GetByIdAsync(int id)
+        public async Task<Article> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _dbSet.FindAsync(id);
         }
 
-        public IQueryable<Comment> GetCommentsByArticleId(int id)
+        public async Task<IQueryable<Comment>> GetCommentsByArticleId(int id)
         {
-            throw new NotImplementedException();
+            var entity = await GetByIdAsync(id);
+            if (entity == null)
+            {
+                return null;
+            }
+            return entity.Comments.AsQueryable();
         }
 
-        public IQueryable<Tag> GetTagsByArticleId(int id)
+        public async Task<IQueryable<Tag>> GetTagsByArticleId(int id)
         {
-            throw new NotImplementedException();
+            var entity = await GetByIdAsync(id);
+            if (entity == null)
+            {
+                return null;
+            }
+            return entity.Tags.AsQueryable();
         }
 
         public void Update(Article entity)
         {
-            throw new NotImplementedException();
+            _dbSet.Attach(entity);
+            _dbContext.Entry(entity).State = EntityState.Modified;
         }
     }
 }

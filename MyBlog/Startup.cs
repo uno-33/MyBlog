@@ -140,7 +140,6 @@ namespace MyBlog
             // Configure DI for app services
             services.AddAutoMapper(typeof(AutomapperProfile));
             services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
         }
 

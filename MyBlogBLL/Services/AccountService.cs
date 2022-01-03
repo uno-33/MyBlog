@@ -22,18 +22,15 @@ namespace MyBlogBLL.Services
     public class AccountService : IAccountService
     {
         private readonly UserManager<User> _userManager;
-        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly AuthSettings _authSettings;
 
         public AccountService(
             UserManager<User> userManager, 
-            IConfiguration configuration, 
             IMapper mapper, 
             IOptions<AuthSettings> authSettings)
         {
             _userManager = userManager;
-            _configuration = configuration;
             _mapper = mapper;
             _authSettings = authSettings.Value;
         }
@@ -54,7 +51,6 @@ namespace MyBlogBLL.Services
                 }
                 throw new BlogException(stringBuilder.ToString());
             }
-
             return result.Succeeded;
         }
 

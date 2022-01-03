@@ -7,7 +7,6 @@ namespace MyBlogDAL.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
-        IUserRepository UserRepository { get; }
         IBlogRepository BlogRepository { get; }
         IArticleRepository ArticleRepository { get; }
         ICommentRepository CommentRepository { get; }

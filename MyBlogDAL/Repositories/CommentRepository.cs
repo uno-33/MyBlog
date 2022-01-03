@@ -11,42 +11,50 @@ namespace MyBlogDAL.Repositories
 {
     public class CommentRepository : ICommentRepository
     {
-        private readonly MyBlogDBContext _context;
-        private readonly DbSet<Comment> _comments;
+        private readonly MyBlogDBContext _dbContext;
+        private readonly DbSet<Comment> _dbSet;
 
         public CommentRepository(MyBlogDBContext context)
         {
-            _context = context;
-            _comments = context.Comments;
+            _dbContext = context;
+            _dbSet = context.Comments;
         }
-        public Task AddAsync(Comment entity)
+
+        public async Task AddAsync(Comment entity)
         {
-            throw new NotImplementedException();
+            await _dbSet.AddAsync(entity);
         }
 
         public void Delete(Comment entity)
         {
-            throw new NotImplementedException();
+            _dbSet.Remove(entity);
         }
 
-        public Task DeleteByIdAsync(int id)
+        public async Task<bool> DeleteByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var entity = await GetByIdAsync(id);
+            if (entity == null)
+            {
+                return false;
+            }
+            _dbSet.Remove(entity);
+            return true;
         }
 
         public IQueryable<Comment> FindAll()
         {
-            throw new NotImplementedException();
+            return _dbSet.AsQueryable();
         }
 
-        public Task<Comment> GetByIdAsync(int id)
+        public async Task<Comment> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _dbSet.FindAsync(id);
         }
 
         public void Update(Comment entity)
         {
-            throw new NotImplementedException();
+            _dbSet.Attach(entity);
+            _dbContext.Entry(entity).State = EntityState.Modified;
         }
     }
 }

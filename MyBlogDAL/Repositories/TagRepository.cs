@@ -11,47 +11,55 @@ namespace MyBlogDAL.Repositories
 {
     public class TagRepository : ITagRepository
     {
-        private readonly MyBlogDBContext _context;
-        private readonly DbSet<Tag> _tags;
+        private readonly MyBlogDBContext _dbContext;
+        private readonly DbSet<Tag> _dbSet;
 
         public TagRepository(MyBlogDBContext context)
         {
-            _context = context;
-            _tags = context.Tags;
+            _dbContext = context;
+            _dbSet = context.Tags;
         }
-        public Task AddAsync(Tag entity)
+
+        public async Task AddAsync(Tag entity)
         {
-            throw new NotImplementedException();
+            await _dbSet.AddAsync(entity);
         }
 
         public void Delete(Tag entity)
         {
-            throw new NotImplementedException();
+            _dbSet.Remove(entity);
         }
 
-        public Task DeleteByIdAsync(int id)
+        public async Task<bool> DeleteByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var entity = await GetByIdAsync(id);
+            if (entity == null)
+            {
+                return false;
+            }
+            _dbSet.Remove(entity);
+            return true;
         }
 
         public IQueryable<Tag> FindAll()
         {
-            throw new NotImplementedException();
+            return _dbSet.AsQueryable();
         }
 
-        public Task<Tag> GetByIdAsync(int id)
+        public async Task<Tag> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _dbSet.FindAsync(id);
         }
 
-        public Tag GetByName(string name)
+        public async Task<Tag> GetByNameAsync(string name)
         {
-            throw new NotImplementedException();
+            return await _dbSet.FirstOrDefaultAsync(x => x.Text == name);
         }
 
         public void Update(Tag entity)
         {
-            throw new NotImplementedException();
+            _dbSet.Attach(entity);
+            _dbContext.Entry(entity).State = EntityState.Modified;
         }
     }
 }

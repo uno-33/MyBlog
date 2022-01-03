@@ -19,6 +19,6 @@ namespace MyBlogDAL.Interfaces
 
         void Delete(TEntity entity);
 
-        Task DeleteByIdAsync(int id);
+        Task<bool> DeleteByIdAsync(int id);
     }
 }

@@ -11,47 +11,60 @@ namespace MyBlogDAL.Repositories
 {
     public class BlogRepository : IBlogRepository
     {
-        private readonly MyBlogDBContext _context;
-        private readonly DbSet<Blog> _blogs;
+        private readonly MyBlogDBContext _dBContext;
+        private readonly DbSet<Blog> _dbSet;
 
         public BlogRepository(MyBlogDBContext context)
         {
-            _context = context;
-            _blogs = context.Blogs;
+            _dBContext = context;
+            _dbSet = context.Blogs;
         }
-        public Task AddAsync(Blog entity)
+
+        public async Task AddAsync(Blog entity)
         {
-            throw new NotImplementedException();
+            await _dbSet.AddAsync(entity);
         }
 
         public void Delete(Blog entity)
         {
-            throw new NotImplementedException();
+            _dbSet.Remove(entity);
         }
 
-        public Task DeleteByIdAsync(int id)
+        public async Task<bool> DeleteByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var entity = await GetByIdAsync(id);
+
+            if (entity == null)
+                return false;
+
+            _dbSet.Remove(entity);
+            return true;
         }
 
         public IQueryable<Blog> FindAll()
         {
-            throw new NotImplementedException();
+            return _dbSet.AsQueryable();
         }
 
-        public IQueryable<Article> GetArticlesByBlogId(int id)
+        public async Task<IQueryable<Article>> GetArticlesByBlogId(int id)
         {
-            throw new NotImplementedException();
+            var entity = await GetByIdAsync(id);
+
+            if (entity == null)
+                return null;
+
+            return entity.Articles.AsQueryable();
         }
 
-        public Task<Blog> GetByIdAsync(int id)
+        public async Task<Blog> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _dbSet.FindAsync(id);
         }
 
         public void Update(Blog entity)
         {
-            throw new NotImplementedException();
+            _dbSet.Attach(entity);
+            _dBContext.Entry(entity).State = EntityState.Modified;
         }
     }
 }

@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 namespace MyBlog.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
     [Produces("application/json")]
     public class AccountsController : ControllerBase
     {
