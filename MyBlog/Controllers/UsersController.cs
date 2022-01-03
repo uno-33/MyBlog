@@ -26,7 +26,40 @@ namespace MyBlog.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<bool>> AddUserToRoleAsync(string id, string role)
         {
-            return await _userService.AddUserToRoleAsync(id, role);
+            var result = false;
+            try
+            {
+                result = await _userService.AddUserToRoleAsync(id, role);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+            if (!result)
+                return NotFound();
+
+            return Ok();
+        }
+
+        [HttpPost("removefromrole")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<bool>> RemoveUserFromRole(string id, string role)
+        {
+            var result = false;
+            try
+            {
+                result = await _userService.RemoveUserFromRoleAsync(id, role);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+            if (!result)
+                return NotFound();
+
+            return Ok();
         }
 
         // GET: api/users/5
@@ -34,23 +67,40 @@ namespace MyBlog.Controllers
         [Authorize]
         public async Task<ActionResult<UserModel>> GetByIdAsync(string id)
         {
-            throw new NotImplementedException();
+            var model = await _userService.GetByIdAsync(id);
+
+            if (User.Identity.Name != model?.UserName && !User.IsInRole("Admin"))
+                return Forbid();
+
+            if (model == null)
+                return NotFound("There is not user with such ID");
+
+            return Ok(model);
         }
 
         // GET: api/users/
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<IEnumerable<UserModel>>> GetAll()
+        public ActionResult<IEnumerable<UserModel>> GetAll()
         {
-            throw new NotImplementedException();
+            var users = _userService.GetAll();
+            if (users == null)
+                return NotFound();
+
+            return Ok(users);
         }
 
         // PUT: api/users/5
         [HttpPut("{id}")]
-        [Authorize]
-        public async Task<ActionResult<UserModel>> UpdateById(string id)
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> Update(string id, UserModel model)
         {
-            throw new NotImplementedException();
+            var result = await _userService.UpdateByIdAsync(id, model);
+
+            if (!result)
+                return NotFound();
+
+            return Ok();
         }
 
         // DELETE: api/users/5
@@ -58,7 +108,12 @@ namespace MyBlog.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteById(string id)
         {
-            throw new NotImplementedException();
+            var result = await _userService.DeleteByIdAsync(id);
+
+            if (!result)
+                return NotFound();
+
+            return Ok();
         }
 
         // GET: api/users/5/comments
@@ -67,7 +122,12 @@ namespace MyBlog.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<CommentModel>>> GetAllCommentsByUserId(string id)
         {
-            throw new NotImplementedException();
+            var comments = await _userService.GetCommentsByUserIdAsync(id);
+
+            if (comments == null)
+                return NotFound();
+
+            return Ok(comments);
         }
 
         // GET: api/users/5/articles
@@ -76,7 +136,12 @@ namespace MyBlog.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<ArticleModel>>> GetAllArticlesByUserId(string id)
         {
-            throw new NotImplementedException();
+            var articles = await _userService.GetArticlesByUserIdAsync(id);
+
+            if (articles == null)
+                return NotFound();
+
+            return Ok(articles);
         }
 
         // GET: api/users/5/blogs
@@ -85,7 +150,12 @@ namespace MyBlog.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<BlogModel>>> GetAllBlogsByUserId(string id)
         {
-            throw new NotImplementedException();
+            var blogs = await _userService.GetBlogsByUserIdAsync(id);
+
+            if (blogs == null)
+                return NotFound();
+
+            return Ok(blogs);
         }
     }
 }
