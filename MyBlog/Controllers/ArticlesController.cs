@@ -169,5 +169,15 @@ namespace MyBlog.Controllers
 
             return Ok(tags);
         }
+
+        /// <summary>
+        /// Gets articles based on filter options
+        /// </summary>
+        /// <param name="filter">ArticleFilterModel</param>
+        /// <returns>IEnumerable of ArticleModel</returns>
+        public ActionResult<IEnumerable<ArticleModel>> GetByFilter(ArticleFilterModel filter)
+        {
+            return Ok(_articleService.GetByFilter(filter));
+        }
     }
 }

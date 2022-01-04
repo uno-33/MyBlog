@@ -14,5 +14,6 @@ namespace MyBlogBLL.Services
         Task<IEnumerable<CommentModel>> GetCommentsByArticleId(int id);
         Task<IEnumerable<TagModel>> GetTagsByArticleId(int id);
         void Update(ArticleModel model);
+        IEnumerable<ArticleModel> GetByFilter(ArticleFilterModel filter);
     }
 }

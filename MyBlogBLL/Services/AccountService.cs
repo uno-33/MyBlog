@@ -109,7 +109,7 @@ namespace MyBlogBLL.Services
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Id)
             };
 
             foreach (var role in userRoles)

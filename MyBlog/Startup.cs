@@ -53,16 +53,10 @@ namespace MyBlog
                     Version = "v1",
                     Title = "MyBlog API",
                     Description = "An ASP.NET Core Web API for managing MyBlog app",
-                    TermsOfService = new Uri("https://example.com/terms"),
                     Contact = new OpenApiContact
                     {
-                        Name = "Example Contact",
-                        Url = new Uri("https://example.com/contact")
-                    },
-                    License = new OpenApiLicense
-                    {
-                        Name = "Example License",
-                        Url = new Uri("https://example.com/license")
+                        Name = "Roman Demkiv",
+                        Url = new Uri("mailto:demkiv.xcix@gmail.com")
                     }
                 });
 

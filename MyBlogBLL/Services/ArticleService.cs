@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using MyBlogBLL.Models;
 using MyBlogBLL.Validation;
 using MyBlogDAL.Entities;
 using MyBlogDAL.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -132,6 +134,58 @@ namespace MyBlogBLL.Services
             var entities = await _unitOfWork.ArticleRepository.GetTagsByArticleId(id);
 
             return _mapper.Map<IEnumerable<TagModel>>(entities);
+        }
+
+        private IQueryable<Article> GetByTags(string tagString)
+        {
+            var tags = tagString.Split(',');
+
+            var tagEntities = _unitOfWork.TagRepository
+                .FindAll()
+                .Join(tags, 
+                x => x.Text, 
+                x => x,
+                (x, y) => new Tag());
+
+            return _unitOfWork.ArticleRepository
+                .FindAll().Include(x => x.Tags)
+                .Where(x => !tagEntities.Except(x.Tags).Any());
+        }
+
+        private IQueryable<Article> GetByMatchingText(string text)
+        {
+            return _unitOfWork.ArticleRepository
+                .FindAll()
+                .Where(x => x.Content.Contains(text));
+        }
+
+        /// <summary>
+        /// Gets articles based on filter options
+        /// </summary>
+        /// <param name="filter">ArticleFilterModel</param>
+        /// <returns>IEnumerable of ArticleModel</returns>
+        public IEnumerable<ArticleModel> GetByFilter(ArticleFilterModel filter)
+        {
+            IQueryable<Article> articleEntities = null;
+
+            if (!String.IsNullOrEmpty(filter.MathcingText))
+            {
+                articleEntities = GetByMatchingText(filter.MathcingText);
+            }
+
+            if (!String.IsNullOrEmpty(filter.TagString))
+            {
+                if (articleEntities != null)
+                {
+                    articleEntities = GetByTags(filter.TagString).Intersect(articleEntities);
+                }
+                else
+                {
+                    articleEntities = GetByTags(filter.TagString);
+                }
+            }
+
+            return _mapper.Map<IEnumerable<ArticleModel>>(articleEntities.AsEnumerable());
         }
 
         private void ValidateArticleModel(ArticleModel model)
