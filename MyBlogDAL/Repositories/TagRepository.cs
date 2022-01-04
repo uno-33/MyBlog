@@ -32,17 +32,30 @@ namespace MyBlogDAL.Repositories
 
         public IQueryable<Tag> FindAll()
         {
-            return _dbSet.AsQueryable();
+            return _dbSet.AsQueryable()
+                .Include(x => x.Creator);
         }
 
         public async Task<Tag> GetByIdAsync(int id)
         {
-            return await _dbSet.FindAsync(id);
+            var entity = await _dbSet.FindAsync(id);
+            if (entity == null)
+                return null;
+
+            await _dbContext.Entry(entity).Navigation(nameof(entity.Creator)).LoadAsync();
+
+            return entity;
         }
 
         public async Task<Tag> GetByNameAsync(string name)
         {
-            return await _dbSet.FirstOrDefaultAsync(x => x.Text == name);
+            var entity = await _dbSet.FirstOrDefaultAsync(x => x.Text == name);
+            if (entity == null)
+                return null;
+
+            await _dbContext.Entry(entity).Navigation(nameof(entity.Creator)).LoadAsync();
+
+            return entity;
         }
 
         public void Update(Tag entity)

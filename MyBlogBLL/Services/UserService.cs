@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using MyBlogBLL.Interfaces;
 using MyBlogBLL.Models;
 using MyBlogDAL.Entities;
@@ -134,7 +135,10 @@ namespace MyBlogBLL.Services
         /// <returns>IEnumerable of CommentModel or null if user nor found</returns>
         public async Task<IEnumerable<CommentModel>> GetCommentsByUserIdAsync(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _userManager.Users
+                .Where(x => x.Id == id)
+                .Include(x => x.Comments)
+                .FirstOrDefaultAsync();
 
             if (user == null)
                 return null;
@@ -149,7 +153,10 @@ namespace MyBlogBLL.Services
         /// <returns>IEnumerable of ArticleModel or null if user nor found</returns>
         public async Task<IEnumerable<ArticleModel>> GetArticlesByUserIdAsync(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _userManager.Users
+                .Where(x => x.Id == id)
+                .Include(x => x.Articles)
+                .FirstOrDefaultAsync();
 
             if (user == null)
                 return null;
@@ -164,12 +171,30 @@ namespace MyBlogBLL.Services
         /// <returns>IEnumerable of BlogModel or null if user nor found</returns>
         public async Task<IEnumerable<BlogModel>> GetBlogsByUserIdAsync(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _userManager.Users
+                .Where(x => x.Id == id)
+                .Include(x => x.Blogs)
+                .FirstOrDefaultAsync();
 
             if (user == null)
                 return null;
 
             return _mapper.Map<IEnumerable<BlogModel>>(user.Blogs);
+        }
+
+        /// <summary>
+        /// Gets all user roles
+        /// </summary>
+        /// <param name="id">User id</param>
+        /// <returns>IEnumerable of string or null if user nor found</returns>
+        public async Task<IEnumerable<string>> GetRolesByUserIdAsync(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+                return null;
+
+            return await _userManager.GetRolesAsync(user);
         }
 
     }

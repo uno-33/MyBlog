@@ -211,5 +211,24 @@ namespace MyBlog.Controllers
 
             return Ok(blogs);
         }
+
+        /// <summary>
+        /// Gets all user roles
+        /// </summary>
+        /// <param name="id">User id</param>
+        /// <returns>IEnumerable of string or NotFound if user with such id doesn't exist</returns>
+        // GET: api/users/5/roles
+        [HttpGet]
+        [Route("{id}/roles")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<string>>> GetAllRolesByUserId(string id)
+        {
+            var roles = await _userService.GetRolesByUserIdAsync(id);
+
+            if (roles == null)
+                return NotFound();
+
+            return Ok(roles);
+        }
     }
 }

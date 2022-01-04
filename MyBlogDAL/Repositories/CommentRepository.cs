@@ -32,12 +32,20 @@ namespace MyBlogDAL.Repositories
 
         public IQueryable<Comment> FindAll()
         {
-            return _dbSet.AsQueryable();
+            return _dbSet.AsQueryable()
+                //.Include(x => x.Article)
+                .Include(x => x.Author);
         }
 
         public async Task<Comment> GetByIdAsync(int id)
         {
-            return await _dbSet.FindAsync(id);
+            var entity = await _dbSet.FindAsync(id);
+            if (entity == null)
+                return null;
+
+            await _dbContext.Entry(entity).Navigation(nameof(entity.Author)).LoadAsync();
+
+            return entity;
         }
 
         public void Update(Comment entity)

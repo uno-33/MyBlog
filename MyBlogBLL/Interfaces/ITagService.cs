@@ -1,5 +1,4 @@
 ﻿using MyBlogBLL.Models;
-using MyBlogDAL.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -12,7 +11,7 @@ namespace MyBlogBLL.Services
         Task<bool> DeleteByIdAsync(int id);
         IEnumerable<TagModel> GetAll();
         Task<TagModel> GetByIdAsync(int id);
-        Task<Tag> GetByNameAsync(string name);
+        Task<TagModel> GetByNameAsync(string name);
         void Update(TagModel model);
     }
 }

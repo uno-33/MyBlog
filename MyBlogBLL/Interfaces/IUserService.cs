@@ -15,5 +15,6 @@ namespace MyBlogBLL.Interfaces
         Task<UserModel> GetByIdAsync(string id);
         Task<IEnumerable<CommentModel>> GetCommentsByUserIdAsync(string id);
         Task<bool> UpdateByIdAsync(string id, UserModel model);
+        Task<IEnumerable<string>> GetRolesByUserIdAsync(string id);
     }
 }

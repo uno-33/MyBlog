@@ -31,12 +31,20 @@ namespace MyBlogDAL.Repositories
 
         public IQueryable<Article> FindAll()
         {
-            return _dbSet.AsQueryable();
+            return _dbSet.AsQueryable()
+                .Include(x => x.Blog)
+                .Include(x => x.Creator);
         }
 
         public async Task<Article> GetByIdAsync(int id)
         {
-            return await _dbSet.FindAsync(id);
+            var entity = await _dbSet.FindAsync(id);
+            if (entity == null)
+                return null;
+
+            await _dbContext.Entry(entity).Navigation(nameof(entity.Creator)).LoadAsync();
+
+            return entity;
         }
 
         public async Task<IQueryable<Comment>> GetCommentsByArticleId(int id)
@@ -46,6 +54,8 @@ namespace MyBlogDAL.Repositories
             {
                 return null;
             }
+            await _dbContext.Entry(entity).Collection(x => x.Comments).LoadAsync();
+
             return entity.Comments.AsQueryable();
         }
 
@@ -56,6 +66,8 @@ namespace MyBlogDAL.Repositories
             {
                 return null;
             }
+            await _dbContext.Entry(entity).Collection(x => x.Tags).LoadAsync();
+
             return entity.Tags.AsQueryable();
         }
 

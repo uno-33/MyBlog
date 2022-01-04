@@ -13,8 +13,6 @@ namespace MyBlogBLL.Models
         public int BlogId { get; set; }
         public string CreatorId { get; set; }
         public string CreatorName { get; set; }
-        public ICollection<int> CommentsIds { get; set; }
-        public ICollection<int> TagsIds { get; set; }
 
         public bool IsValid()
         {

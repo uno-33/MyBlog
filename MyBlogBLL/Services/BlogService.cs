@@ -81,7 +81,7 @@ namespace MyBlogBLL.Services
         /// <returns>IEnumerable of BlogModel</returns>
         public IEnumerable<BlogModel> GetAll()
         {
-            var entities = _unitOfWork.BlogRepository.FindAll();
+            var entities = _unitOfWork.BlogRepository.FindAll().ToList();
 
             return _mapper.Map<IEnumerable<BlogModel>>(entities);
         }

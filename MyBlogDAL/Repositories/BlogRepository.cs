@@ -32,7 +32,7 @@ namespace MyBlogDAL.Repositories
 
         public IQueryable<Blog> FindAll()
         {
-            return _dbSet.AsQueryable();
+            return _dbSet.AsQueryable().Include(x => x.Creator);
         }
 
         public async Task<IQueryable<Article>> GetArticlesByBlogId(int id)
@@ -42,12 +42,20 @@ namespace MyBlogDAL.Repositories
             if (entity == null)
                 return null;
 
+            await _dBContext.Entry(entity).Collection(x => x.Articles).LoadAsync();
+
             return entity.Articles.AsQueryable();
         }
 
         public async Task<Blog> GetByIdAsync(int id)
         {
-            return await _dbSet.FindAsync(id);
+            var entity = await _dbSet.FindAsync(id);
+            if (entity == null)
+                return null;
+
+            await _dBContext.Entry(entity).Navigation(nameof(entity.Creator)).LoadAsync();
+
+            return entity;
         }
 
         public void Update(Blog entity)
