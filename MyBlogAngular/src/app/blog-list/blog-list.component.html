@@ -1,0 +1,12 @@
+<p>blog-list works!</p>
+<div>
+  <table>
+    <tr *ngFor="let blog of blogs; let i = index">
+      <td>{{i}}.</td>
+      <td>{{blog.id}}</td>
+      <td>{{blog.name}}</td>
+      <td>{{blog.creatorId}}</td>
+      <td>{{blog.creatorName}}</td>
+    </tr>
+  </table>
+</div>

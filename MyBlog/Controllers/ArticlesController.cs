@@ -29,6 +29,7 @@ namespace MyBlog.Controllers
         {
             _articleService = articleService;
         }
+
         /// <summary>
         /// Gets all articles
         /// </summary>
@@ -175,7 +176,8 @@ namespace MyBlog.Controllers
         /// </summary>
         /// <param name="filter">ArticleFilterModel</param>
         /// <returns>IEnumerable of ArticleModel</returns>
-        public ActionResult<IEnumerable<ArticleModel>> GetByFilter(ArticleFilterModel filter)
+        [HttpGet("filter")]
+        public ActionResult<IEnumerable<ArticleModel>> GetByFilter([FromQuery] ArticleFilterModel filter)
         {
             return Ok(_articleService.GetByFilter(filter));
         }
