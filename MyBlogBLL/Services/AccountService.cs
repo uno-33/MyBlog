@@ -72,18 +72,18 @@ namespace MyBlogBLL.Services
         /// Signs in user in DB
         /// </summary>
         /// <param name="model">Model containing username and password</param>
-        /// <returns>UserModel with JWT inside</returns>
-        public async Task<UserModel> LoginAsync(LoginModel model)
+        /// <returns>JwtModel</returns>
+        public async Task<JwtModel> LoginAsync(LoginModel model)
         {
             var user = await GetUserByLoginModelAsync(model);
 
             var token = await GenerateTokenAsync(user);
 
-            var userModel = _mapper.Map<UserModel>(user);
-
-            userModel.Token = token;
-
-            return userModel;
+            return new JwtModel
+            {
+                Token = token,
+                ExpiresIn = _authSettings.LifetimeInMinutes
+            };
         }
 
         private async Task<User> GetUserByLoginModelAsync(LoginModel model)

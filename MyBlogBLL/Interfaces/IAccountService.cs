@@ -5,7 +5,7 @@ namespace MyBlogBLL.Interfaces
 {
     public interface IAccountService
     {
-        Task<UserModel> LoginAsync(LoginModel model);
+        Task<JwtModel> LoginAsync(LoginModel model);
         Task<bool> RegisterAsync(RegisterModel model);
     }
 }

@@ -14,6 +14,7 @@ namespace MyBlog.Controllers
     /// </summary>
     [ApiController]
     [Produces("application/json")]
+    [Route("api/[controller]")]
     public class AccountsController : ControllerBase
     {
         private readonly IAccountService _accountService;
@@ -45,7 +46,7 @@ namespace MyBlog.Controllers
         /// <param name="model">Model with username and password inside</param>
         /// <returns>UserModel with JWT inside</returns>
         [HttpPost("login")]
-        public async Task<ActionResult<UserModel>> Login(LoginModel model)
+        public async Task<ActionResult<JwtModel>> Login(LoginModel model)
         {
             return await _accountService.LoginAsync(model);
         }
