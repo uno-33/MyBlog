@@ -2,10 +2,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BlogListComponent } from './blog-list/blog-list.component';
 import { HomeComponent } from './home/home.component';
+import { LatestBlogsComponent } from './latest-blogs/latest-blogs.component';
 import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent, pathMatch: 'full' },
+  { path: '', component: LatestBlogsComponent, pathMatch: 'full' },
   { path: 'blogs', component: BlogListComponent },
   { path: 'login', component: LoginComponent }
 ];

@@ -88,6 +88,20 @@ namespace MyBlogBLL.Services
         }
 
         /// <summary>
+        /// Get latest articles
+        /// </summary>
+        /// <param name="count">Number to get</param>
+        /// <returns></returns>
+        public IEnumerable<ArticleModel> GetLatest(int count = 5)
+        {
+            var entities = _unitOfWork.ArticleRepository.FindAll()
+                .OrderByDescending(x => x.DateOfCreation)
+                .Take(count);
+
+            return _mapper.Map<IEnumerable<ArticleModel>>(entities);
+        }
+
+        /// <summary>
         /// Gets article by id
         /// </summary>
         /// <param name="id">Article id</param>
@@ -136,56 +150,38 @@ namespace MyBlogBLL.Services
             return _mapper.Map<IEnumerable<TagModel>>(entities);
         }
 
-        private IQueryable<Article> GetByTags(string tagString)
+        /// <summary>
+        /// Gets all articles containing tag
+        /// </summary>
+        /// <param name="tagName">Name of the tag</param>
+        /// <returns>IEnumerable of ArticleModel</returns>
+        public async Task<IEnumerable<ArticleModel>> GetByTag(string tagName)
         {
-            var tags = tagString.Split(',');
+            var tag = await _unitOfWork.TagRepository.GetByNameAsync(tagName);
 
-            var tagEntities = _unitOfWork.TagRepository
-                .FindAll()
-                .Join(tags, 
-                x => x.Text, 
-                x => x,
-                (x, y) => new Tag());
+            if (tag == null)
+                throw new BlogException("Tag not found!");
 
-            return _unitOfWork.ArticleRepository
+            var articles = _unitOfWork.ArticleRepository
                 .FindAll().Include(x => x.Tags)
-                .Where(x => !tagEntities.Except(x.Tags).Any());
-        }
+                .Where(x => x.Tags.Contains(tag))
+                .AsEnumerable();
 
-        private IQueryable<Article> GetByMatchingText(string text)
-        {
-            return _unitOfWork.ArticleRepository
-                .FindAll()
-                .Where(x => x.Content.Contains(text));
+            return _mapper.Map<IEnumerable<ArticleModel>>(articles);
         }
 
         /// <summary>
-        /// Gets articles based on filter options
+        /// Gets all articles containing text
         /// </summary>
-        /// <param name="filter">ArticleFilterModel</param>
+        /// <param name="text"></param>
         /// <returns>IEnumerable of ArticleModel</returns>
-        public IEnumerable<ArticleModel> GetByFilter(ArticleFilterModel filter)
+        public IEnumerable<ArticleModel> GetByMatchingText(string text)
         {
-            IQueryable<Article> articleEntities = null;
+            var articles = _unitOfWork.ArticleRepository
+                .FindAll()
+                .Where(x => x.Content.Contains(text));
 
-            if (!String.IsNullOrEmpty(filter.MathcingText))
-            {
-                articleEntities = GetByMatchingText(filter.MathcingText);
-            }
-
-            if (!String.IsNullOrEmpty(filter.TagString))
-            {
-                if (articleEntities != null)
-                {
-                    articleEntities = GetByTags(filter.TagString).Intersect(articleEntities);
-                }
-                else
-                {
-                    articleEntities = GetByTags(filter.TagString);
-                }
-            }
-
-            return _mapper.Map<IEnumerable<ArticleModel>>(articleEntities.AsEnumerable());
+            return _mapper.Map<IEnumerable<ArticleModel>>(articles);
         }
 
         private void ValidateArticleModel(ArticleModel model)

@@ -172,14 +172,36 @@ namespace MyBlog.Controllers
         }
 
         /// <summary>
-        /// Gets articles based on filter options
+        /// Gets articles by matching text
         /// </summary>
-        /// <param name="filter">ArticleFilterModel</param>
-        /// <returns>IEnumerable of ArticleModel</returns>
-        [HttpGet("filter")]
-        public ActionResult<IEnumerable<ArticleModel>> GetByFilter([FromQuery] ArticleFilterModel filter)
+        /// <param name="text"></param>
+        /// <returns></returns>
+        [HttpGet("search")]
+        public ActionResult<IEnumerable<ArticleModel>> GetByText(string text)
         {
-            return Ok(_articleService.GetByFilter(filter));
+            return Ok(_articleService.GetByMatchingText(text));
+        }
+
+        /// <summary>
+        /// Gets articles by tag
+        /// </summary>
+        /// <param name="tagName"></param>
+        /// <returns></returns>
+        [HttpGet("tag")]
+        public ActionResult<IEnumerable<ArticleModel>> GetByTag(string tagName)
+        {
+            return Ok(_articleService.GetByTag(tagName));
+        }
+
+        /// <summary>
+        /// Gets recently created articles
+        /// </summary>
+        /// <param name="count">Number of articles to load</param>
+        /// <returns></returns>
+        [HttpGet("latest/{count?}")]
+        public ActionResult<IEnumerable<ArticleModel>> GetLatest(int count = 5)
+        {
+            return Ok(_articleService.GetLatest(count));
         }
     }
 }

@@ -9,8 +9,10 @@ import { HomeComponent } from './home/home.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { BlogListComponent } from './blog-list/blog-list.component';
 import { LoginComponent } from './login/login.component';
-import { AuthService } from './services/auth/auth.service';
-import { AuthInterceptor } from './Interceptors/auth.interceptor';
+import { AuthInterceptor } from 'src/Interceptors/auth.interceptor';
+import { LatestArticlesComponent } from './latest-articles/latest-articles.component';
+import { SearchBoxComponent } from './search-box/search-box.component';
+import { LatestBlogsComponent } from './latest-blogs/latest-blogs.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,10 @@ import { AuthInterceptor } from './Interceptors/auth.interceptor';
     HomeComponent,
     NavMenuComponent,
     BlogListComponent,
-    LoginComponent
+    LoginComponent,
+    LatestArticlesComponent,
+    SearchBoxComponent,
+    LatestBlogsComponent
   ],
   imports: [
     BrowserModule,

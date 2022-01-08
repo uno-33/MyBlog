@@ -152,5 +152,16 @@ namespace MyBlog.Controllers
 
             return Ok(articles);
         }
+
+        /// <summary>
+        /// Gets recently created blogs
+        /// </summary>
+        /// <param name="count">Number of blogs to load</param>
+        /// <returns></returns>
+        [HttpGet("latest/{count?}")]
+        public ActionResult<IEnumerable<BlogModel>> GetLatest(int count = 5)
+        {
+            return Ok(_blogService.GetLatest(count));
+        }
     }
 }

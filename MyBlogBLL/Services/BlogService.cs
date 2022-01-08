@@ -87,6 +87,19 @@ namespace MyBlogBLL.Services
         }
 
         /// <summary>
+        /// Gets latest blogs
+        /// </summary>
+        /// <returns>IEnumerable of BlogModel</returns>
+        public IEnumerable<BlogModel> GetLatest(int count = 5)
+        {
+            var entities = _unitOfWork.BlogRepository.FindAll()
+                .OrderByDescending(x => x.Id)
+                .Take(count);
+
+            return _mapper.Map<IEnumerable<BlogModel>>(entities);
+        }
+
+        /// <summary>
         /// Gets all articles of this blog
         /// </summary>
         /// <param name="id">Blog id</param>

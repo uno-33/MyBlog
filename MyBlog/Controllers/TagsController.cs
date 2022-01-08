@@ -41,22 +41,22 @@ namespace MyBlog.Controllers
             return Ok(_tagService.GetAll());
         }
 
-        /// <summary>
-        /// Get tag by id
-        /// </summary>
-        /// <param name="id">Tag id</param>
-        /// <returns>TagModel or NotFound if tag with such id doesn't exist</returns>
-        // GET api/<TagsController>/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<TagModel>> GetById(int id)
-        {
-            var tag = await _tagService.GetByIdAsync(id);
+        ///// <summary>
+        ///// Get tag by id
+        ///// </summary>
+        ///// <param name="id">Tag id</param>
+        ///// <returns>TagModel or NotFound if tag with such id doesn't exist</returns>
+        //// GET api/<TagsController>/5
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<TagModel>> GetById(int id)
+        //{
+        //    var tag = await _tagService.GetByIdAsync(id);
 
-            if (tag == null)
-                return NotFound();
+        //    if (tag == null)
+        //        return NotFound();
 
-            return Ok(tag);
-        }
+        //    return Ok(tag);
+        //}
 
         /// <summary>
         /// Gets tag by name

@@ -12,6 +12,7 @@ namespace MyBlogBLL.Services
         IEnumerable<BlogModel> GetAll();
         Task<IEnumerable<ArticleModel>> GetArticlesByBlogId(int id);
         Task<BlogModel> GetByIdAsync(int id);
+        IEnumerable<BlogModel> GetLatest(int count = 5);
         void Update(BlogModel model);
     }
 }
