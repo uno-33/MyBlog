@@ -9,6 +9,8 @@ import { HomeComponent } from './home/home.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { BlogListComponent } from './blog-list/blog-list.component';
 import { LoginComponent } from './login/login.component';
+import { AuthService } from './services/auth/auth.service';
+import { AuthInterceptor } from './Interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,7 @@ import { LoginComponent } from './login/login.component';
     HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
