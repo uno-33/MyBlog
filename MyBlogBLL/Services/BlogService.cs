@@ -43,6 +43,8 @@ namespace MyBlogBLL.Services
 
             await _unitOfWork.BlogRepository.AddAsync(entity);
             await _unitOfWork.SaveAsync();
+
+            model.Id = entity.Id;
         }
 
         /// <summary>

@@ -9,7 +9,7 @@ import { LoginComponent } from './login/login.component';
 const routes: Routes = [
   { path: '', component: LatestBlogsComponent, pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  {path: 'blogs/new', component: BlogCreateFormComponent},
+  { path: 'blogs/new', component: BlogCreateFormComponent },
   { path: 'blogs/:id', component: BlogPageComponent },
 ];
 

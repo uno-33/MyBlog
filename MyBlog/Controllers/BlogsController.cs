@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyBlog.ViewModels;
 using MyBlogBLL.Models;
 using MyBlogBLL.Services;
 using MyBlogBLL.Validation;
@@ -67,12 +68,18 @@ namespace MyBlog.Controllers
         // POST api/<BlogsController>
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<BlogModel>> Add([FromBody] BlogModel blogModel)
+        public async Task<ActionResult<BlogModel>> Add([FromBody] BlogViewModel blogModel)
         {
             try
             {
-                await _blogService.AddAsync(blogModel);
-                return Ok();
+                var model = new BlogModel
+                {
+                    Name = blogModel.Name,
+                    Description = blogModel.Description,
+                    CreatorId = HttpContext.User.Identity.Name
+                };
+                await _blogService.AddAsync(model);
+                return Ok(model);
             }
             catch (BlogException ex)
             {

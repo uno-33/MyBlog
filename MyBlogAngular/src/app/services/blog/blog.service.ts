@@ -29,4 +29,9 @@ export class BlogService {
     let url = `${this.baseUrl}${ApiPaths.Blogs}/${id}/articles`;
     return this._http.get<Article[]>(url);
   }
+
+  create(name: string, description: string) {
+    let url = `${this.baseUrl}${ApiPaths.Blogs}`;
+    return this._http.post<Blog>(url, {name, description});
+  }
 }

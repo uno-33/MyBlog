@@ -14,7 +14,7 @@ namespace MyBlogBLL.Models
 
         public bool IsValid()
         {
-            if (Name.Length == 0 || CreatorId.Length == 0 || CreatorName.Length == 0)
+            if (Name.Length == 0 || CreatorId.Length == 0 || Description.Length == 0)
                 return false;
 
             return true;
