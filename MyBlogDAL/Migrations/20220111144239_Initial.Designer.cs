@@ -10,8 +10,8 @@ using MyBlogDAL;
 namespace MyBlogDAL.Migrations
 {
     [DbContext(typeof(MyBlogDBContext))]
-    [Migration("20220102173518_rev1")]
-    partial class rev1
+    [Migration("20220111144239_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -211,6 +211,9 @@ namespace MyBlogDAL.Migrations
 
                     b.Property<string>("CreatorId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
