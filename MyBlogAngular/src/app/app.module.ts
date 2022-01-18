@@ -20,6 +20,7 @@ import { ArticlePageComponent } from './article-page/article-page.component';
 import { ArticleCreateFormComponent } from './article-create-form/article-create-form.component';
 import { ArticleDeletePageComponent } from './article-delete-page/article-delete-page.component';
 import { ArticleEditFormComponent } from './article-edit-form/article-edit-form.component';
+import { CommentListComponent } from './comment-list/comment-list.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ArticleEditFormComponent } from './article-edit-form/article-edit-form.
     ArticlePageComponent,
     ArticleCreateFormComponent,
     ArticleDeletePageComponent,
-    ArticleEditFormComponent
+    ArticleEditFormComponent,
+    CommentListComponent
   ],
   imports: [
     BrowserModule,

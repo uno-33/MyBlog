@@ -100,7 +100,7 @@ namespace MyBlog.Controllers
         /// Updates article
         /// </summary>
         /// <param name="id">Article id</param>
-        /// <param name="articleModel">ArticleModel to update</param>
+        /// <param name="articleViewModel">ArticleViewModel to update</param>
         /// <returns>OK if successful, BadRequest if not</returns>
         // PUT api/<ArticlesController>/5
         [HttpPut("{id}")]

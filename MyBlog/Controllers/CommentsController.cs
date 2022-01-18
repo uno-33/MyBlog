@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyBlog.ViewModels;
 using MyBlogBLL.Models;
 using MyBlogBLL.Services;
 using MyBlogBLL.Validation;
@@ -62,17 +63,24 @@ namespace MyBlog.Controllers
         /// <summary>
         /// Creates new comment
         /// </summary>
-        /// <param name="commentModel">CommentModel to create</param>
+        /// <param name="commentViewModel">CommentViewModel to create</param>
         /// <returns>OK if successful, BadRequest if not</returns>
         // POST api/<CommentsController>
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult> Create([FromBody] CommentModel commentModel)
+        public async Task<ActionResult> Create([FromBody] CommentViewModel commentViewModel)
         {
             try
             {
-                await _commentService.AddAsync(commentModel);
-                return Ok();
+                var model = new CommentModel
+                {
+                    Content = commentViewModel.Content,
+                    ArticleId = commentViewModel.ArticleId,
+                    DateOfCreation = DateTime.Now,
+                    AuthorId = HttpContext.User.Identity.Name
+                };
+                await _commentService.AddAsync(model);
+                return Ok(model);
             }
             catch (BlogException ex)
             {

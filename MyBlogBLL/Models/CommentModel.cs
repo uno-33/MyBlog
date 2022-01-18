@@ -15,7 +15,7 @@ namespace MyBlogBLL.Models
 
         public bool IsValid()
         {
-            if (Content.Length == 0 || DateOfCreation == DateTime.MinValue || AuthorId.Length == 0 || AuthorName.Length == 0)
+            if (Content.Length == 0 || DateOfCreation == DateTime.MinValue || AuthorId.Length == 0)
                 return false;
 
             return true;

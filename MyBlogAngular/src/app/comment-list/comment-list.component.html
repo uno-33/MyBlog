@@ -1,0 +1,19 @@
+
+<div class="d-flex flex-column col">
+    <div class="coment-bottom bg-white p-2 px-4">
+        <form class="d-flex flex-row add-comment-section mt-4 mb-4" [formGroup]="addCommentForm" (ngSubmit)="addComment()">
+            <input type="text" class="form-control mr-3" placeholder="Add comment" formControlName="content">
+            <button class="btn btn-primary" type="submit" [disabled]="!addCommentForm.valid">Comment</button>
+        </form>
+        <div class="commented-section mt-3 border border-1 border-secondary rounded p-2" *ngFor="let comment of comments.slice().reverse()">
+            <div class="d-flex flex-row justify-content-between commented-user border-bottom">
+                <h5 class="me-5">{{comment.authorName}}</h5>
+                <span>{{comment.dateOfCreation}}</span>
+            </div>
+            <div class="comment-text-sm">
+                <span>{{comment.content}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+    
