@@ -2,16 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs';
+import { ApiPaths } from 'src/apipaths';
 import { ArticleService } from '../services/article/article.service';
 
 @Component({
-  selector: 'app-article-delete-page',
-  templateUrl: './article-delete-page.component.html',
-  styleUrls: ['./article-delete-page.component.css']
+  selector: 'app-article-edit-form',
+  templateUrl: './article-edit-form.component.html',
+  styleUrls: ['./article-edit-form.component.css']
 })
-export class ArticleDeletePageComponent implements OnInit {
+export class ArticleEditFormComponent implements OnInit {
 
-  deleteArticleForm:FormGroup;
+  editArticleForm:FormGroup;
   articleId: number = 0;
   blogId: number = 0;
   
@@ -21,9 +22,9 @@ export class ArticleDeletePageComponent implements OnInit {
     private _router: Router, 
     private _activatedRoute: ActivatedRoute) { 
 
-    this.deleteArticleForm = fb.group({
-      title: [{ value: '', disabled: true }, Validators.required],
-      content: [{ value: '', disabled: true }, Validators.required]
+    this.editArticleForm = fb.group({
+      title: ['', Validators.required],
+      content: ['', Validators.required]
     });
   }
 
@@ -41,7 +42,7 @@ export class ArticleDeletePageComponent implements OnInit {
     
     this._articleService.getById(this.articleId)
       .subscribe(article => {
-        this.deleteArticleForm.setValue({
+        this.editArticleForm.setValue({
           title: article.title,
           content: article.content
         });
@@ -49,11 +50,14 @@ export class ArticleDeletePageComponent implements OnInit {
   }
 
   onSubmit() {
+    const val = this.editArticleForm.value;
 
-    this._articleService.delete(this.articleId)
-    .subscribe(() => {
-      this._router.navigate(['blogs', this.blogId]);
-    })
+    if(val.title && val.content) {
+      this._articleService.edit(this.articleId, val.title, val.content)
+      .subscribe(article => {
+        this._router.navigate(['blogs', this.blogId, 'articles', article.id]);
+      })
+    }
   }
 
 }

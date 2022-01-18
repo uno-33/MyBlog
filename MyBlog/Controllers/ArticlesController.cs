@@ -105,12 +105,19 @@ namespace MyBlog.Controllers
         // PUT api/<ArticlesController>/5
         [HttpPut("{id}")]
         [Authorize]
-        public ActionResult Update(int id, [FromBody] ArticleModel articleModel)
+        public async Task<ActionResult<ArticleModel>> Update(int id, [FromBody] ArticleViewModel articleViewModel)
         {
             try
             {
-                _articleService.Update(articleModel);
-                return Ok();
+                var model = await _articleService.GetByIdAsync(id);
+                if (model == null)
+                    return NotFound();
+
+                model.Title = articleViewModel.Title;
+                model.Content = articleViewModel.Content;
+
+                _articleService.Update(model);
+                return Ok(model);
             }
             catch (BlogException ex)
             {

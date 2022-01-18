@@ -6,7 +6,6 @@ import { HttpClient, HttpClientModule, HttpHandler, HTTP_INTERCEPTORS } from '@a
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { BlogListComponent } from './blog-list/blog-list.component';
 import { LoginComponent } from './login/login.component';
 import { AuthInterceptor } from 'src/Interceptors/auth.interceptor';
 import { LatestArticlesComponent } from './latest-articles/latest-articles.component';
@@ -20,12 +19,12 @@ import { BlogDeletePageComponent } from './blog-delete-page/blog-delete-page.com
 import { ArticlePageComponent } from './article-page/article-page.component';
 import { ArticleCreateFormComponent } from './article-create-form/article-create-form.component';
 import { ArticleDeletePageComponent } from './article-delete-page/article-delete-page.component';
+import { ArticleEditFormComponent } from './article-edit-form/article-edit-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
-    BlogListComponent,
     LoginComponent,
     LatestArticlesComponent,
     SearchBoxComponent,
@@ -37,7 +36,8 @@ import { ArticleDeletePageComponent } from './article-delete-page/article-delete
     BlogDeletePageComponent,
     ArticlePageComponent,
     ArticleCreateFormComponent,
-    ArticleDeletePageComponent
+    ArticleDeletePageComponent,
+    ArticleEditFormComponent
   ],
   imports: [
     BrowserModule,

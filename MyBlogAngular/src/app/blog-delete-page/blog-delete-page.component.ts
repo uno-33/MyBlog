@@ -46,7 +46,7 @@ export class BlogDeletePageComponent implements OnInit {
   onSubmit() {
 
     this._blogService.delete(this.blogId)
-    .subscribe(blog => {
+    .subscribe(() => {
       this._router.navigate(['/']);
     })
   }

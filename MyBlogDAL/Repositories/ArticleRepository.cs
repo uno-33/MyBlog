@@ -36,7 +36,7 @@ namespace MyBlogDAL.Repositories
                 .Include(x => x.Creator);
         }
 
-        public async Task<Article> GetByIdAsync(int id)
+        public async Task<Article> GetByIdWithDetailsAsync(int id)
         {
             var entity = await _dbSet.FindAsync(id);
             if (entity == null)
@@ -47,9 +47,20 @@ namespace MyBlogDAL.Repositories
             return entity;
         }
 
+        public async Task<Article> GetByIdAsync(int id)
+        {
+            var entity = await _dbSet.FindAsync(id);
+            if (entity == null)
+                return null;
+
+            _dbContext.Entry(entity).State = EntityState.Detached;
+
+            return entity;
+        }
+
         public async Task<IQueryable<Comment>> GetCommentsByArticleId(int id)
         {
-            var entity = await GetByIdAsync(id);
+            var entity = await GetByIdWithDetailsAsync(id);
             if (entity == null)
             {
                 return null;
@@ -61,7 +72,7 @@ namespace MyBlogDAL.Repositories
 
         public async Task<IQueryable<Tag>> GetTagsByArticleId(int id)
         {
-            var entity = await GetByIdAsync(id);
+            var entity = await GetByIdWithDetailsAsync(id);
             if (entity == null)
             {
                 return null;

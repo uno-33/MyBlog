@@ -32,4 +32,14 @@ export class ArticleService {
     let url = `${this.baseUrl}${ApiPaths.Articles}`;
     return this._http.post<Article>(url, {blogId, content, title});
   }
+
+  delete(id: number) {
+    let url = `${this.baseUrl}${ApiPaths.Articles}/${id}`;
+    return this._http.delete(url);
+  }
+
+  edit(id: number, title: string, content: string) {
+    let url = `${this.baseUrl}${ApiPaths.Articles}/${id}`;
+    return this._http.put<Article>(url, {id, title, content});
+  }
 }
