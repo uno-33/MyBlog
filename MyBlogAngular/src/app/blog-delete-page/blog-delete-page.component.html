@@ -1,0 +1,10 @@
+<form [formGroup]="deleteBlogForm" (ngSubmit)="onSubmit()">
+
+    <label for="blog-name" class="form-label">Blog Name: </label>
+    <input id="blog-name" type="text" class="form-control" formControlName="name">
+
+    <label for="blog-description" class="form-label">Blog Description: </label>
+    <textarea id="blog-description" type="text" class="form-control" rows="4" formControlName="description" [disabled]="true"></textarea>
+
+    <button type="submit" class="btn btn-primary">Delete</button>
+</form>

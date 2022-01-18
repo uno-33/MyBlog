@@ -1,0 +1,11 @@
+<form [formGroup]="editBlogForm" (ngSubmit)="onSubmit()">
+
+    <label for="blog-name" class="form-label">Blog Name: </label>
+    <input id="blog-name" type="text" class="form-control" formControlName="name">
+
+    <label for="blog-description" class="form-label">Blog Description: </label>
+    <textarea id="blog-description" type="text" class="form-control" rows="4" formControlName="description"></textarea>
+
+    <p class="form-text">Form Status: {{ editBlogForm.status }}</p>
+    <button type="submit" class="btn btn-primary" [disabled]="!editBlogForm.valid">Edit</button>
+</form>

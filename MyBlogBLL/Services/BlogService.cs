@@ -121,6 +121,19 @@ namespace MyBlogBLL.Services
         public async Task<BlogModel> GetByIdAsync(int id)
         {
             var entity = await _unitOfWork.BlogRepository.GetByIdAsync(id);
+
+            return _mapper.Map<BlogModel>(entity);
+        }
+
+        /// <summary>
+        /// Gets blog by id with details
+        /// </summary>
+        /// <param name="id">Blog id</param>
+        /// <returns>BlogModel</returns>
+        public async Task<BlogModel> GetByIdWithDetailsAsync(int id)
+        {
+            var entity = await _unitOfWork.BlogRepository.GetByIdWithDetailsAsync(id);
+
             return _mapper.Map<BlogModel>(entity);
         }
 

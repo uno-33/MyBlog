@@ -52,7 +52,7 @@ namespace MyBlog.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<BlogModel>> GetById(int id)
         {
-            var blog = await _blogService.GetByIdAsync(id);
+            var blog = await _blogService.GetByIdWithDetailsAsync(id);
 
             if (blog == null)
                 return NotFound();
@@ -63,19 +63,19 @@ namespace MyBlog.Controllers
         /// <summary>
         /// Creates new blog
         /// </summary>
-        /// <param name="blogModel">BlogModel to create in DB</param>
+        /// <param name="blogViewModel">BlogViewModel to create in DB</param>
         /// <returns>OK if successful, BadRequest if not</returns>
         // POST api/<BlogsController>
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<BlogModel>> Add([FromBody] BlogViewModel blogModel)
+        public async Task<ActionResult<BlogModel>> Add([FromBody] BlogViewModel blogViewModel)
         {
             try
             {
                 var model = new BlogModel
                 {
-                    Name = blogModel.Name,
-                    Description = blogModel.Description,
+                    Name = blogViewModel.Name,
+                    Description = blogViewModel.Description,
                     CreatorId = HttpContext.User.Identity.Name
                 };
                 await _blogService.AddAsync(model);
@@ -99,17 +99,24 @@ namespace MyBlog.Controllers
         /// Updates blog
         /// </summary>
         /// <param name="id">Blog id</param>
-        /// <param name="blogModel">BlogModel to update</param>
+        /// <param name="blogViewModel">BlogViewModel to update</param>
         /// <returns>OK if successful, BadRequest if not</returns>
         // PUT api/<BlogsController>/5
         [HttpPut("{id}")]
         [Authorize]
-        public ActionResult<BlogModel> Update(int id, [FromBody] BlogModel blogModel)
+        public async Task<ActionResult<BlogModel>> Update(int id, [FromBody] BlogViewModel blogViewModel)
         {
             try
             {
-                _blogService.Update(blogModel);
-                return Ok();
+                var model = await _blogService.GetByIdAsync(id);
+                if (model == null)
+                    return NotFound();
+
+                model.Name = blogViewModel.Name;
+                model.Description = blogViewModel.Description;
+
+                _blogService.Update(model);
+                return Ok(model);
             }
             catch (BlogException ex)
             {

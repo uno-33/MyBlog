@@ -15,6 +15,8 @@ import { LatestBlogsComponent } from './latest-blogs/latest-blogs.component';
 import { BlogPageComponent } from './blog-page/blog-page.component';
 import { BlogCreateFormComponent } from './blog-create-form/blog-create-form.component';
 import { TruncatePipe } from './truncate.pipe';
+import { BlogEditFormComponent } from './blog-edit-form/blog-edit-form.component';
+import { BlogDeletePageComponent } from './blog-delete-page/blog-delete-page.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { TruncatePipe } from './truncate.pipe';
     LatestBlogsComponent,
     BlogPageComponent,
     BlogCreateFormComponent,
-    TruncatePipe
+    TruncatePipe,
+    BlogEditFormComponent,
+    BlogDeletePageComponent
   ],
   imports: [
     BrowserModule,

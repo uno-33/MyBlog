@@ -34,4 +34,14 @@ export class BlogService {
     let url = `${this.baseUrl}${ApiPaths.Blogs}`;
     return this._http.post<Blog>(url, {name, description});
   }
+
+  edit(id: number, name: string, description: string) {
+    let url = `${this.baseUrl}${ApiPaths.Blogs}/${id}`;
+    return this._http.put<Blog>(url, {name, description});
+  }
+
+  delete(id: number) {
+    let url = `${this.baseUrl}${ApiPaths.Blogs}/${id}`;
+    return this._http.delete<boolean>(url);
+  }
 }

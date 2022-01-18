@@ -37,7 +37,7 @@ namespace MyBlogDAL.Repositories
 
         public async Task<IQueryable<Article>> GetArticlesByBlogId(int id)
         {
-            var entity = await GetByIdAsync(id);
+            var entity = await GetByIdWithDetailsAsync(id);
 
             if (entity == null)
                 return null;
@@ -53,6 +53,17 @@ namespace MyBlogDAL.Repositories
             if (entity == null)
                 return null;
 
+            _dBContext.Entry(entity).State = EntityState.Detached;
+
+            return entity;
+        }
+
+        public async Task<Blog> GetByIdWithDetailsAsync(int id)
+        {
+            var entity = await _dbSet.FindAsync(id);
+            if (entity == null)
+                return null;
+
             await _dBContext.Entry(entity).Navigation(nameof(entity.Creator)).LoadAsync();
 
             return entity;
@@ -60,6 +71,7 @@ namespace MyBlogDAL.Repositories
 
         public void Update(Blog entity)
         {
+
             _dbSet.Attach(entity);
             _dBContext.Entry(entity).State = EntityState.Modified;
         }

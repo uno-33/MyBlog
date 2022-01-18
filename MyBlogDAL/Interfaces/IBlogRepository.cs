@@ -10,5 +10,6 @@ namespace MyBlogDAL.Interfaces
     public interface IBlogRepository : IRepository<Blog>
     {
         Task<IQueryable<Article>> GetArticlesByBlogId(int id);
+        Task<Blog> GetByIdWithDetailsAsync(int id);
     }
 }
