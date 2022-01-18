@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyBlog.ViewModels;
 using MyBlogBLL.Models;
 using MyBlogBLL.Services;
 using MyBlogBLL.Validation;
@@ -61,17 +62,25 @@ namespace MyBlog.Controllers
         /// <summary>
         /// Creates new article
         /// </summary>
-        /// <param name="articleModel">ArticleModel to create in DB</param>
+        /// <param name="articleViewModel">ArticleViewModel to create in DB</param>
         /// <returns>OK if successful, BadRequest if not</returns>
         // POST api/<ArticlesController>
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult> Create([FromBody] ArticleModel articleModel)
+        public async Task<ActionResult<ArticleModel>> Create([FromBody] ArticleViewModel articleViewModel)
         {
             try
             {
-                await _articleService.AddAsync(articleModel);
-                return Ok();
+                var model = new ArticleModel
+                {
+                    Title = articleViewModel.Title,
+                    Content = articleViewModel.Content,
+                    BlogId = articleViewModel.BlogId,
+                    CreatorId = HttpContext.User.Identity.Name,
+                    DateOfCreation = DateTime.Now
+                };
+                await _articleService.AddAsync(model);
+                return Ok(model);
             }
             catch (BlogException ex)
             {

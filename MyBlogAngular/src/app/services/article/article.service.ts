@@ -20,7 +20,16 @@ export class ArticleService {
 
   getByText(text: string) {
     let url = `${this.baseUrl}${ApiPaths.Articles}/search?text=${text}`;
-
     return this._http.get<Article[]>(url);
+  }
+
+  getById(id: number) {
+    let url = `${this.baseUrl}${ApiPaths.Articles}/${id}`;
+    return this._http.get<Article>(url);
+  }
+
+  create(title: string, content: string, blogId: number) {
+    let url = `${this.baseUrl}${ApiPaths.Articles}`;
+    return this._http.post<Article>(url, {blogId, content, title});
   }
 }

@@ -1,0 +1,11 @@
+<form [formGroup]="createArticleForm" (ngSubmit)="onSubmit()">
+
+    <label for="article-title" class="form-label">Title: </label>
+    <input id="article-title" type="text" class="form-control" formControlName="title">
+
+    <label for="article-content" class="form-label">Content: </label>
+    <textarea id="article-content" type="text" class="form-control" rows="5" formControlName="content"></textarea>
+
+    <p class="form-text">Form Status: {{ createArticleForm.status }}</p>
+    <button type="submit" class="btn btn-primary" [disabled]="!createArticleForm.valid">Create</button>
+</form>

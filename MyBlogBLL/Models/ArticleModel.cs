@@ -19,8 +19,7 @@ namespace MyBlogBLL.Models
             if (Title.Length == 0 || 
                 Content.Length == 0 || 
                 DateOfCreation == DateTime.MinValue || 
-                CreatorId.Length == 0 || 
-                CreatorName.Length == 0)
+                CreatorId.Length == 0)
                 return false;
 
             return true;
