@@ -100,17 +100,23 @@ namespace MyBlog.Controllers
         /// Updates comment
         /// </summary>
         /// <param name="id">Comment id</param>
-        /// <param name="commentModel">CommentModel to update</param>
+        /// <param name="content">Updated content</param>
         /// <returns>OK if successful, BadRequest if not</returns>
         // PUT api/<CommentsController>/5
         [HttpPut("{id}")]
         [Authorize]
-        public ActionResult Update(int id, [FromBody] CommentModel commentModel)
+        public async Task<ActionResult<CommentModel>> Update(int id, [FromBody] CommentViewModel commentViewModel)
         {
             try
             {
-                _commentService.Update(commentModel);
-                return Ok();
+                var model = await _commentService.GetByIdAsync(id);
+                if (model == null)
+                    return NotFound();
+
+                model.Content = commentViewModel.Content;
+
+                _commentService.Update(model);
+                return Ok(model);
             }
             catch (BlogException ex)
             {

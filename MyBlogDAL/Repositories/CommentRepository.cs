@@ -43,6 +43,17 @@ namespace MyBlogDAL.Repositories
             if (entity == null)
                 return null;
 
+            _dbContext.Entry(entity).State = EntityState.Detached;
+
+            return entity;
+        }
+
+        public async Task<Comment> GetByIdWithDetailsAsync(int id)
+        {
+            var entity = await _dbSet.FindAsync(id);
+            if (entity == null)
+                return null;
+
             await _dbContext.Entry(entity).Navigation(nameof(entity.Author)).LoadAsync();
 
             return entity;

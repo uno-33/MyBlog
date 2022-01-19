@@ -21,6 +21,10 @@ import { ArticleCreateFormComponent } from './article-create-form/article-create
 import { ArticleDeletePageComponent } from './article-delete-page/article-delete-page.component';
 import { ArticleEditFormComponent } from './article-edit-form/article-edit-form.component';
 import { CommentListComponent } from './comment-list/comment-list.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import { CommentEditDialogComponent } from './comment-edit-dialog/comment-edit-dialog.component';
+import { CommentDeleteDialogComponent } from './comment-delete-dialog/comment-delete-dialog.component';
 
 @NgModule({
   declarations: [
@@ -39,16 +43,23 @@ import { CommentListComponent } from './comment-list/comment-list.component';
     ArticleCreateFormComponent,
     ArticleDeletePageComponent,
     ArticleEditFormComponent,
-    CommentListComponent
+    CommentListComponent,
+    CommentEditDialogComponent,
+    CommentDeleteDialogComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatDialogModule
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

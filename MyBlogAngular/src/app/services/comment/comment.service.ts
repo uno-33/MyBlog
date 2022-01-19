@@ -22,6 +22,16 @@ export class CommentService {
     let url = `${this.baseUrl}${ApiPaths.Comments}`;
     return this._http.post<Comment>(url, {content, articleId});
   }
+
+  update(commentId: number, content: string) {
+    let url = `${this.baseUrl}${ApiPaths.Comments}/${commentId}`;
+    return this._http.put(url, {content});
+  }
+
+  delete(commentId: number) {
+    let url = `${this.baseUrl}${ApiPaths.Comments}/${commentId}`;
+    return this._http.delete(url);
+  }
 }
 
 
