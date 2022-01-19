@@ -9,7 +9,6 @@ namespace MyBlogDAL.Interfaces
 {
     public interface IArticleRepository : IRepository<Article>
     {
-        Task<IQueryable<Comment>> GetCommentsByArticleId(int id);
-        Task<IQueryable<Tag>> GetTagsByArticleId(int id);
+        
     }
 }

@@ -32,8 +32,7 @@ namespace MyBlogDAL.Repositories
 
         public IQueryable<Tag> FindAll()
         {
-            return _dbSet.AsQueryable()
-                .Include(x => x.Creator);
+            return _dbSet.AsQueryable();
         }
 
         public async Task<Tag> GetByIdAsync(int id)
@@ -42,7 +41,7 @@ namespace MyBlogDAL.Repositories
             if (entity == null)
                 return null;
 
-            await _dbContext.Entry(entity).Navigation(nameof(entity.Creator)).LoadAsync();
+            _dbContext.Entry(entity).State = EntityState.Detached;
 
             return entity;
         }
@@ -53,7 +52,7 @@ namespace MyBlogDAL.Repositories
             if (entity == null)
                 return null;
 
-            await _dbContext.Entry(entity).Navigation(nameof(entity.Creator)).LoadAsync();
+            _dbContext.Entry(entity).State = EntityState.Detached;
 
             return entity;
         }

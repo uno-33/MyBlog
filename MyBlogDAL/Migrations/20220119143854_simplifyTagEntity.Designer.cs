@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyBlogDAL;
 
 namespace MyBlogDAL.Migrations
 {
     [DbContext(typeof(MyBlogDBContext))]
-    partial class MyBlogDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220119143854_simplifyTagEntity")]
+    partial class simplifyTagEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

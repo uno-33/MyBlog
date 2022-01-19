@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using MyBlogBLL.Models;
 using MyBlogBLL.Validation;
 using MyBlogDAL.Entities;
@@ -45,20 +46,6 @@ namespace MyBlogBLL.Services
         }
 
         /// <summary>
-        /// Deletes comment from DB by model
-        /// </summary>
-        /// <param name="model">CommentModel to delete</param>
-        public void Delete(CommentModel model)
-        {
-            ValidateCommentModel(model);
-
-            var entity = _mapper.Map<Comment>(model);
-
-            _unitOfWork.CommentRepository.Delete(entity);
-            _unitOfWork.SaveAsync();
-        }
-
-        /// <summary>
         /// Deletes comment from DB by id
         /// </summary>
         /// <param name="id">Comment id</param>
@@ -94,6 +81,25 @@ namespace MyBlogBLL.Services
         {
             var entity = await _unitOfWork.CommentRepository.GetByIdAsync(id);
             return _mapper.Map<CommentModel>(entity);
+        }
+
+        /// <summary>
+        /// Gets all comments related to this article
+        /// </summary>
+        /// <param name="id">Article id</param>
+        /// <returns>IEnumerable of CommentModel</returns>
+        public async Task<IEnumerable<CommentModel>> GetAllByArticleIdAsync(int id)
+        {
+            var article = await _unitOfWork
+                .ArticleRepository
+                .FindAll()
+                .Include(x => x.Comments)
+                .SingleOrDefaultAsync(x => x.Id == id);
+
+            if (article == null)
+                throw new ArgumentException("There is not article with such ID");
+
+            return _mapper.Map<IEnumerable<CommentModel>>(article.Comments);
         }
 
         /// <summary>

@@ -6,12 +6,10 @@ namespace MyBlogBLL.Services
 {
     public interface ITagService
     {
-        Task AddAsync(TagModel model);
-        void Delete(TagModel model);
+        Task AddToArticleAsync(int articleId, string tagName);
         Task<bool> DeleteByIdAsync(int id);
-        IEnumerable<TagModel> GetAll();
-        Task<TagModel> GetByIdAsync(int id);
+        Task<IEnumerable<TagModel>> GetAllByArticleIdAsync(int id);
         Task<TagModel> GetByNameAsync(string name);
-        void Update(TagModel model);
+        Task RemoveFromArticleAsync(int articleId, string tagName);
     }
 }

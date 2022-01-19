@@ -30,58 +30,6 @@ namespace MyBlog.Controllers
         }
 
         /// <summary>
-        /// Adds user to role
-        /// </summary>
-        /// <param name="id">User id</param>
-        /// <param name="role">Role name</param>
-        /// <returns>OK if successful, NotFound if either user or role isn't in DB</returns>
-        [HttpPost("addtorole")]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> AddUserToRoleAsync(string id, string role)
-        {
-            var result = false;
-            try
-            {
-                result = await _userService.AddUserToRoleAsync(id, role);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return NotFound(ex.Message);
-            }
-
-            if (!result)
-                return NotFound();
-
-            return Ok();
-        }
-
-        /// <summary>
-        /// Removes user from role
-        /// </summary>
-        /// <param name="id">User id</param>
-        /// <param name="role">Role name</param>
-        /// <returns>OK if successful, NotFound if either user or role isn't in DB</returns>
-        [HttpPost("removefromrole")]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<bool>> RemoveUserFromRole(string id, string role)
-        {
-            var result = false;
-            try
-            {
-                result = await _userService.RemoveUserFromRoleAsync(id, role);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return NotFound(ex.Message);
-            }
-
-            if (!result)
-                return NotFound();
-
-            return Ok();
-        }
-
-        /// <summary>
         /// Gets user by id
         /// </summary>
         /// <param name="id">User id</param>
@@ -229,6 +177,58 @@ namespace MyBlog.Controllers
                 return NotFound();
 
             return Ok(roles);
+        }
+
+        /// <summary>
+        /// Add user to role
+        /// </summary>
+        /// <param name="id">Id of the user</param>
+        /// <param name="role">Role name</param>
+        /// <returns>OK if successful, NotFound if either user or role isn't in DB</returns>
+        [HttpPost("{id}/roles")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> AddUserToRoleAsync(string id, [FromBody] string role)
+        {
+            var result = false;
+            try
+            {
+                result = await _userService.AddUserToRoleAsync(id, role);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+            if (!result)
+                return NotFound();
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Removes user from role
+        /// </summary>
+        /// <param name="id">User id</param>
+        /// <param name="role">Role name</param>
+        /// <returns>OK if successful, NotFound if either user or role isn't in DB</returns>
+        [HttpDelete("{id}/roles/{role}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<bool>> RemoveUserFromRole(string id, string role)
+        {
+            var result = false;
+            try
+            {
+                result = await _userService.RemoveUserFromRoleAsync(id, role);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+            if (!result)
+                return NotFound();
+
+            return Ok();
         }
     }
 }

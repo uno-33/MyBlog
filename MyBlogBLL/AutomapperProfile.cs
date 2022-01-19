@@ -51,8 +51,8 @@ namespace MyBlogBLL
             //    //.ForMember(tm => tm.CreatorName, i => i.MapFrom(t => t.Creator.UserName))
             //    .ForMember(tm => tm.ArticlesIds, i => i.MapFrom(t => t.Articles.Select(x => x.Id)))
                 .ReverseMap();
-            CreateMap<Tag, TagModel>()
-                .ForMember(tm => tm.CreatorName, i => i.MapFrom(t => t.Creator.UserName));
+            CreateMap<Tag, TagModel>();
+                //.ForMember(tm => tm.CreatorName, i => i.MapFrom(t => t.Creator.UserName));
                 //.ForMember(tm => tm.ArticlesIds, i => i.MapFrom(t => t.Articles.Select(x => x.Id)));
         }
     }

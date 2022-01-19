@@ -49,20 +49,6 @@ namespace MyBlogBLL.Services
         }
 
         /// <summary>
-        /// Deletes article from DB by model
-        /// </summary>
-        /// <param name="model">ArticleModel to delete</param>
-        public void Delete(ArticleModel model)
-        {
-            ValidateArticleModel(model);
-
-            var entity = _mapper.Map<Article>(model);
-
-            _unitOfWork.ArticleRepository.Delete(entity);
-            _unitOfWork.SaveAsync();
-        }
-
-        /// <summary>
         /// Deletes article from DB by id
         /// </summary>
         /// <param name="id">Article id</param>
@@ -129,27 +115,17 @@ namespace MyBlogBLL.Services
         }
 
         /// <summary>
-        /// Gets all comments related to this article
+        /// Gets all articles containing text
         /// </summary>
-        /// <param name="id">Article id</param>
-        /// <returns>IEnumerable of CommentModel</returns>
-        public async Task<IEnumerable<CommentModel>> GetCommentsByArticleId(int id)
+        /// <param name="text"></param>
+        /// <returns>IEnumerable of ArticleModel</returns>
+        public IEnumerable<ArticleModel> GetByMatchingText(string text)
         {
-            var entities = await _unitOfWork.ArticleRepository.GetCommentsByArticleId(id);
+            var articles = _unitOfWork.ArticleRepository
+                .FindAll()
+                .Where(x => x.Content.Contains(text));
 
-            return _mapper.Map<IEnumerable<CommentModel>>(entities);
-        }
-
-        /// <summary>
-        /// Gets all tags related to this article
-        /// </summary>
-        /// <param name="id">Article id</param>
-        /// <returns>IEnumerable of TagModel</returns>
-        public async Task<IEnumerable<TagModel>> GetTagsByArticleId(int id)
-        {
-            var entities = await _unitOfWork.ArticleRepository.GetTagsByArticleId(id);
-
-            return _mapper.Map<IEnumerable<TagModel>>(entities);
+            return _mapper.Map<IEnumerable<ArticleModel>>(articles);
         }
 
         /// <summary>
@@ -157,7 +133,7 @@ namespace MyBlogBLL.Services
         /// </summary>
         /// <param name="tagName">Name of the tag</param>
         /// <returns>IEnumerable of ArticleModel</returns>
-        public async Task<IEnumerable<ArticleModel>> GetByTag(string tagName)
+        public async Task<IEnumerable<ArticleModel>> GetByTagAsync(string tagName)
         {
             var tag = await _unitOfWork.TagRepository.GetByNameAsync(tagName);
 
@@ -168,20 +144,6 @@ namespace MyBlogBLL.Services
                 .FindAll().Include(x => x.Tags)
                 .Where(x => x.Tags.Contains(tag))
                 .AsEnumerable();
-
-            return _mapper.Map<IEnumerable<ArticleModel>>(articles);
-        }
-
-        /// <summary>
-        /// Gets all articles containing text
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns>IEnumerable of ArticleModel</returns>
-        public IEnumerable<ArticleModel> GetByMatchingText(string text)
-        {
-            var articles = _unitOfWork.ArticleRepository
-                .FindAll()
-                .Where(x => x.Content.Contains(text));
 
             return _mapper.Map<IEnumerable<ArticleModel>>(articles);
         }

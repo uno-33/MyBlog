@@ -58,29 +58,6 @@ namespace MyBlogDAL.Repositories
             return entity;
         }
 
-        public async Task<IQueryable<Comment>> GetCommentsByArticleId(int id)
-        {
-            var entity = await GetByIdWithDetailsAsync(id);
-            if (entity == null)
-            {
-                return null;
-            }
-            await _dbContext.Entry(entity).Collection(x => x.Comments).LoadAsync();
-
-            return entity.Comments.AsQueryable();
-        }
-
-        public async Task<IQueryable<Tag>> GetTagsByArticleId(int id)
-        {
-            var entity = await GetByIdWithDetailsAsync(id);
-            if (entity == null)
-            {
-                return null;
-            }
-            await _dbContext.Entry(entity).Collection(x => x.Tags).LoadAsync();
-
-            return entity.Tags.AsQueryable();
-        }
 
         public void Update(Article entity)
         {

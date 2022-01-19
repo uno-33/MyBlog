@@ -21,14 +21,14 @@ namespace MyBlog.Controllers
     public class ArticlesController : ControllerBase
     {
         private readonly IArticleService _articleService;
+        private readonly ITagService _tagService;
+        private readonly ICommentService _commentService;
 
-        /// <summary>
-        /// Article controller constructor
-        /// </summary>
-        /// <param name="articleService">Implementation of articleService</param>
-        public ArticlesController(IArticleService articleService)
+        public ArticlesController(IArticleService articleService, ITagService tagService, ICommentService commentService)
         {
             _articleService = articleService;
+            _tagService = tagService;
+            _commentService = commentService;
         }
 
         /// <summary>
@@ -86,11 +86,11 @@ namespace MyBlog.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch(ArgumentNullException ex)
+            catch (ArgumentNullException ex)
             {
                 return BadRequest(ex.Message);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -161,30 +161,12 @@ namespace MyBlog.Controllers
         [Route("{id}/comments")]
         public async Task<ActionResult<IEnumerable<CommentModel>>> GetCommentsByArticleId(int id)
         {
-            var comments = await _articleService.GetCommentsByArticleId(id);
-            
+            var comments = await _commentService.GetAllByArticleIdAsync(id);
+
             if (comments == null)
                 return NotFound();
 
             return Ok(comments);
-        }
-
-        /// <summary>
-        /// Gets all tags from certain article
-        /// </summary>
-        /// <param name="id">Article id</param>
-        /// <returns>IEnumerable of TagModel or NotFound if article with such id doesn't exist in DB</returns>
-        // GET: api/articles/5/tags
-        [HttpGet]
-        [Route("{id}/tags")]
-        public async Task<ActionResult<IEnumerable<TagModel>>> GetAllTagsByArticleId(int id)
-        {
-            var tags = await _articleService.GetTagsByArticleId(id);
-
-            if (tags == null)
-                return NotFound();
-
-            return Ok(tags);
         }
 
         /// <summary>
@@ -204,9 +186,9 @@ namespace MyBlog.Controllers
         /// <param name="tagName"></param>
         /// <returns></returns>
         [HttpGet("tag")]
-        public ActionResult<IEnumerable<ArticleModel>> GetByTag(string tagName)
+        public ActionResult<IEnumerable<ArticleModel>> GetByTagAsync(string tagName)
         {
-            return Ok(_articleService.GetByTag(tagName));
+            return Ok(_articleService.GetByTagAsync(tagName));
         }
 
         /// <summary>
@@ -218,6 +200,64 @@ namespace MyBlog.Controllers
         public ActionResult<IEnumerable<ArticleModel>> GetLatest(int count = 5)
         {
             return Ok(_articleService.GetLatest(count));
+        }
+
+        /// <summary>
+        /// Gets all tags from certain article
+        /// </summary>
+        /// <param name="id">Article id</param>
+        /// <returns>IEnumerable of TagModel or NotFound if article with such id doesn't exist in DB</returns>
+        // GET: api/articles/5/tags
+        [HttpGet]
+        [Route("{id}/tags")]
+        public async Task<ActionResult<IEnumerable<TagModel>>> GetAllByArticleIdAsync(int id)
+        {
+            var tags = await _tagService.GetAllByArticleIdAsync(id);
+
+            if (tags == null)
+                return NotFound();
+
+            return Ok(tags);
+        }
+
+        /// <summary>
+        /// Add tag to the article
+        /// </summary>
+        /// <param name="id">Id of the article</param>
+        /// <param name="tagViewModel">Name of the tag</param>
+        /// <returns></returns>
+        [HttpPost("{id}/tags")]
+        public async Task<ActionResult> AddTagAsync(int id, [FromBody] TagViewModel tagViewModel)
+        {
+            try
+            {
+                await _tagService.AddToArticleAsync(id, tagViewModel.Name);
+                return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Remove tag from the article
+        /// </summary>
+        /// <param name="id">Id of the article</param>
+        /// <param name="tagName">Name of the tag</param>
+        /// <returns></returns>
+        [HttpDelete("{id}/tags/{tagName}")]
+        public async Task<ActionResult> RemoveTagAsync(int id, string tagName)
+        {
+            try
+            {
+                await _tagService.RemoveFromArticleAsync(id, tagName);
+                return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
     }
 }

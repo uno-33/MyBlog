@@ -100,7 +100,7 @@ namespace MyBlog.Controllers
         /// Updates comment
         /// </summary>
         /// <param name="id">Comment id</param>
-        /// <param name="content">Updated content</param>
+        /// <param name="commentViewModel">Updated content</param>
         /// <returns>OK if successful, BadRequest if not</returns>
         // PUT api/<CommentsController>/5
         [HttpPut("{id}")]
