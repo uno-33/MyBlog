@@ -19,11 +19,14 @@ export class BlogPageComponent implements OnInit {
   constructor(private _activateRoute : ActivatedRoute, private _blogService : BlogService) { }
 
   ngOnInit(): void {
-    this._activateRoute.paramMap.pipe(
-      switchMap(params => params.getAll('id'))
-    )
-    .subscribe(data => this.id = +data);
-    
+    this._activateRoute.paramMap.subscribe(params => {
+      this.id = Number(params.get('id'));
+
+      this.LoadData();
+    }) 
+  }
+
+  LoadData() {
     this._blogService.getById(this.id)
       .subscribe(blog => this.blog = blog);
 

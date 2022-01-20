@@ -8,12 +8,10 @@ namespace MyBlogBLL.Models
     {
         public int Id { get; set; }
         public string Text { get; set; }
-        public string CreatorId { get; set; }
-        public string CreatorName { get; set; }
 
         public bool IsValid()
         {
-            if (Text.Length == 0 || CreatorId.Length == 0 || CreatorName.Length == 0)
+            if (Text.Length == 0)
                 return false;
 
             return true;

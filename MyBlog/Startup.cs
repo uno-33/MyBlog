@@ -43,7 +43,9 @@ namespace MyBlog
         /// <param name="services">Implementation of services</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
 
             // Add Swagger
             services.AddSwaggerGen(options =>
@@ -115,21 +117,14 @@ namespace MyBlog
                     options.RequireHttpsMetadata = false;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        // укзывает, будет ли валидироваться издатель при валидации токена
                         ValidateIssuer = false,
-                        // строка, представляющая издателя
                         ValidIssuer = authSettings.Issuer,
 
-                        // будет ли валидироваться потребитель токена
                         ValidateAudience = true,
-                        // установка потребителя токена
                         ValidAudience = authSettings.Audience,
-                        // будет ли валидироваться время существования
                         ValidateLifetime = true,
 
-                        // установка ключа безопасности
                         IssuerSigningKey = new SymmetricSecurityKey(key),
-                        // валидация ключа безопасности
                         ValidateIssuerSigningKey = true,
                     };
                 });

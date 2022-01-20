@@ -83,6 +83,7 @@ namespace MyBlogBLL.Services
         public IEnumerable<ArticleModel> GetLatest(int count = 5)
         {
             var entities = _unitOfWork.ArticleRepository.FindAll()
+                .Include(x => x.Creator)
                 .OrderByDescending(x => x.DateOfCreation)
                 .Take(count);
 
@@ -97,6 +98,17 @@ namespace MyBlogBLL.Services
         public async Task<ArticleModel> GetByIdAsync(int id)
         {
             var entity = await _unitOfWork.ArticleRepository.GetByIdAsync(id);
+            return _mapper.Map<ArticleModel>(entity);
+        }
+
+        /// <summary>
+        /// Gets article by id
+        /// </summary>
+        /// <param name="id">Article id</param>
+        /// <returns>ArticleModel</returns>
+        public async Task<ArticleModel> GetByIdWithDetailsAsync(int id)
+        {
+            var entity = await _unitOfWork.ArticleRepository.GetByIdWithDetailsAsync(id);
             return _mapper.Map<ArticleModel>(entity);
         }
 
@@ -123,7 +135,8 @@ namespace MyBlogBLL.Services
         {
             var articles = _unitOfWork.ArticleRepository
                 .FindAll()
-                .Where(x => x.Content.Contains(text));
+                .Where(x => x.Content.Contains(text))
+                .Include(x => x.Creator);
 
             return _mapper.Map<IEnumerable<ArticleModel>>(articles);
         }
@@ -138,12 +151,13 @@ namespace MyBlogBLL.Services
             var tag = await _unitOfWork.TagRepository.GetByNameAsync(tagName);
 
             if (tag == null)
-                throw new BlogException("Tag not found!");
+                throw new ArgumentException("There is no such tag!");
 
             var articles = _unitOfWork.ArticleRepository
-                .FindAll().Include(x => x.Tags)
-                .Where(x => x.Tags.Contains(tag))
-                .AsEnumerable();
+                .FindAll()
+                .Include(x => x.Tags)
+                .Include(x => x.Creator)
+                .Where(x => x.Tags.Contains(tag));
 
             return _mapper.Map<IEnumerable<ArticleModel>>(articles);
         }

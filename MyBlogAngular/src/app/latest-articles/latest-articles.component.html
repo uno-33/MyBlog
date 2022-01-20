@@ -1,7 +1,7 @@
 <p class="lead text-center">Latest articles</p>
 <figure class="text-end" *ngFor="let article of articles">
   <blockquote class="blockquote">
-    <p>{{article.title}}</p>
+    <a href="" [routerLink]="['/blogs', article.blogId, 'articles', article.id]">{{article.title}}</a>
   </blockquote>
   <figcaption class="blockquote-footer">
     Author: <cite title="Source Title">{{article.creatorName}}</cite>

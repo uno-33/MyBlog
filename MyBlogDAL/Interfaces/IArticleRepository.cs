@@ -9,6 +9,6 @@ namespace MyBlogDAL.Interfaces
 {
     public interface IArticleRepository : IRepository<Article>
     {
-        
+        Task<Article> GetByIdWithDetailsAsync(int id);
     }
 }

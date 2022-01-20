@@ -49,9 +49,9 @@ namespace MyBlog.Controllers
         /// <returns>ArticleModel or NotFound if blog with such id doesn't exist</returns>
         // GET api/<ArticlesController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ArticleModel>> GetById(int id)
+        public async Task<ActionResult<ArticleModel>> GetByIdWithDetails(int id)
         {
-            var article = await _articleService.GetByIdAsync(id);
+            var article = await _articleService.GetByIdWithDetailsAsync(id);
 
             if (article == null)
                 return NotFound();
@@ -186,9 +186,9 @@ namespace MyBlog.Controllers
         /// <param name="tagName"></param>
         /// <returns></returns>
         [HttpGet("tag")]
-        public ActionResult<IEnumerable<ArticleModel>> GetByTagAsync(string tagName)
+        public async Task<ActionResult<IEnumerable<ArticleModel>>> GetByTagAsync(string tagName)
         {
-            return Ok(_articleService.GetByTagAsync(tagName));
+            return Ok(await _articleService.GetByTagAsync(tagName));
         }
 
         /// <summary>

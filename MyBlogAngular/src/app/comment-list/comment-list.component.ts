@@ -30,11 +30,15 @@ export class CommentListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._activateRoute.paramMap.pipe(
-      switchMap(params => params.getAll('articleid'))
-    )
-    .subscribe(data => this.articleId = +data);
+    
+    this._activateRoute.paramMap.subscribe(params => {
+      this.articleId = Number(params.get('articleid'));
 
+      this.LoadData();
+    })  
+  }
+
+  LoadData() {
     this._commentService.getAll(this.articleId)
       .subscribe(comments => this.comments = comments);
   }

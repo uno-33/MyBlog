@@ -31,9 +31,7 @@ namespace MyBlogDAL.Repositories
 
         public IQueryable<Article> FindAll()
         {
-            return _dbSet.AsQueryable()
-                .Include(x => x.Blog)
-                .Include(x => x.Creator);
+            return _dbSet.AsQueryable();
         }
 
         public async Task<Article> GetByIdWithDetailsAsync(int id)

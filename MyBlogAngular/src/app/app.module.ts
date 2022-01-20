@@ -25,6 +25,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { CommentEditDialogComponent } from './comment-edit-dialog/comment-edit-dialog.component';
 import { CommentDeleteDialogComponent } from './comment-delete-dialog/comment-delete-dialog.component';
+import { TagListComponent } from './tag-list/tag-list.component';
+import { TagAddDialogComponent } from './tag-add-dialog/tag-add-dialog.component';
+import { SearchPageComponent } from './search-page/search-page.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +48,10 @@ import { CommentDeleteDialogComponent } from './comment-delete-dialog/comment-de
     ArticleEditFormComponent,
     CommentListComponent,
     CommentEditDialogComponent,
-    CommentDeleteDialogComponent
+    CommentDeleteDialogComponent,
+    TagListComponent,
+    TagAddDialogComponent,
+    SearchPageComponent
   ],
   imports: [
     BrowserModule,

@@ -1,8 +1,5 @@
-<div class="input-group">
-  <div class="form-outline">
-    <input id="search-input" type="search" placeholder="Search" class="form-control" />
-  </div>
-  <button id="search-button" type="button" class="btn btn-primary" (click)="[]">
-    Search
-  </button>
-</div>
+<form class="form-outline d-flex flex-row" [formGroup]="searchBoxForm" (ngSubmit)="searchArticlesByText()">
+  <input id="search-input" type="search" placeholder="Search" class="form-control" formControlName="searchText"/>
+  <button class="btn btn-primary" type="submit" [disabled]="!searchBoxForm.valid">Search</button>
+</form>
+

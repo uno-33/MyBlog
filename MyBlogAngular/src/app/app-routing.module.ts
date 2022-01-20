@@ -10,6 +10,7 @@ import { BlogEditFormComponent } from './blog-edit-form/blog-edit-form.component
 import { BlogPageComponent } from './blog-page/blog-page.component';
 import { LatestBlogsComponent } from './latest-blogs/latest-blogs.component';
 import { LoginComponent } from './login/login.component';
+import { SearchPageComponent } from './search-page/search-page.component';
 
 const routes: Routes = [
   { path: '', component: LatestBlogsComponent, pathMatch: 'full' },
@@ -21,7 +22,8 @@ const routes: Routes = [
   { path: 'blogs/:id/articles/new', component: ArticleCreateFormComponent },
   { path: 'blogs/:id/articles/:articleid', component: ArticlePageComponent },
   { path: 'blogs/:id/articles/:articleid/edit', component: ArticleEditFormComponent },
-  { path: 'blogs/:id/articles/:articleid/delete', component: ArticleDeletePageComponent }
+  { path: 'blogs/:id/articles/:articleid/delete', component: ArticleDeletePageComponent },
+  { path: 'search', component: SearchPageComponent }
 ];
 
 @NgModule({
