@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Blog } from '../models/blog';
+import { Blog } from '../_models/blog';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { BlogService } from '../services/blog/blog.service';
-import { Article } from '../models/article';
+import { Article } from '../_models/article';
+import { AuthService } from '../services/auth/auth.service';
 
 @Component({
   selector: 'app-blog-page',
@@ -16,7 +17,9 @@ export class BlogPageComponent implements OnInit {
   blog!: Blog;
   articles : Article[] = [];
   
-  constructor(private _activateRoute : ActivatedRoute, private _blogService : BlogService) { }
+  constructor(private _activateRoute : ActivatedRoute, 
+    private _blogService : BlogService, 
+    public _authService: AuthService) { }
 
   ngOnInit(): void {
     this._activateRoute.paramMap.subscribe(params => {
@@ -32,6 +35,13 @@ export class BlogPageComponent implements OnInit {
 
     this._blogService.getArticlesByBlogId(this.id)
       .subscribe(articles => this.articles = articles);
+  }
+
+  public isAccessible() {
+    if(this._authService.isOwner(this.blog?.creatorId!) || this._authService.isAdmin())
+      return true;
+
+    return false;
   }
 
 }

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { ApiPaths } from 'src/apipaths';
 import { environment } from 'src/environments/environment';
-import { Blog } from '../../models/blog';
+import { Blog } from '../../_models/blog';
 
 @Injectable({
   providedIn: 'root'

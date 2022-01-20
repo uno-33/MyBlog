@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { ApiPaths } from 'src/apipaths';
-import { Blog } from '../models/blog';
+import { Blog } from '../_models/blog';
 import { BlogService } from '../services/blog/blog.service';
 
 @Component({

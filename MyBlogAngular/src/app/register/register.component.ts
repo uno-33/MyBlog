@@ -5,57 +5,54 @@ import { first } from 'rxjs/internal/operators/first';
 import { AuthService } from '../services/auth/auth.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html'
+  selector: 'app-register',
+  templateUrl: './register.component.html'
 })
-export class LoginComponent implements OnInit {
+export class RegisterComponent implements OnInit {
 
-    loginForm!: FormGroup;
+  regForm!: FormGroup;
     loading = false;
     submitted = false;
     error = '';
 
     constructor(
-        private formBuilder: FormBuilder,
-        private route: ActivatedRoute,
-        private router: Router,
-        private authService: AuthService
+        private _formBuilder: FormBuilder,
+        private _route: ActivatedRoute,
+        private _router: Router,
+        private _authService: AuthService
     ) { 
         // redirect to home if already logged in
-        if (this.authService.userValue) { 
-            this.router.navigate(['/']);
+        if (this._authService.userValue) { 
+            this._router.navigate(['/']);
         }
         
     }
 
     ngOnInit() {
-        this.loginForm = this.formBuilder.group({
+        this.regForm = this._formBuilder.group({
             username: ['', Validators.required],
             password: ['', Validators.required]
         });
     }
 
     // convenience getter for easy access to form fields
-    get f() { return this.loginForm.controls; }
+    get f() { return this.regForm.controls; }
 
     onSubmit() {
         this.submitted = true;
 
         // stop here if form is invalid
-        if (this.loginForm.invalid) {
+        if (this.regForm.invalid) {
             return;
         }
 
         this.loading = true;
-        const val = this.loginForm.value;
+        const val = this.regForm.value;
 
-        this.authService.login(val.username, val.password)
-            .pipe(first())
+        this._authService.register(val.username, val.password)
             .subscribe({
                 next: () => {
-                    // get return url from query parameters or default to home page
-                    const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-                    this.router.navigateByUrl(returnUrl);
+                    this._router.navigateByUrl('login');
                 },
                 error: error => {
                     this.error = error;

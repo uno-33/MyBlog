@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { ApiPaths } from 'src/apipaths';
-import { Article } from 'src/app/models/article';
-import { Blog } from 'src/app/models/blog';
+import { Article } from 'src/app/_models/article';
+import { Blog } from 'src/app/_models/blog';
 import { environment } from 'src/environments/environment';
 
 @Injectable({

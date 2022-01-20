@@ -2,7 +2,7 @@
         <div class="row">
             <div class="col-md-2"><a href="" [routerLink]="['/blogs', blogId]">Get Back to Blog</a></div>
             <div class="col-md-1 offset-8">
-                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                <div class="btn-group" role="group" aria-label="Basic mixed styles example" *ngIf="isAccessible()">
                   <a href="" class="btn btn-warning" [routerLink]="['edit']">Edit</a>
                   <a href="" class="btn btn-danger" [routerLink]="['delete']">Delete</a>
                 </div>

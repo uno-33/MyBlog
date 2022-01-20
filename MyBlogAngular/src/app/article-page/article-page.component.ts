@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs';
-import { Article } from '../models/article';
+import { Article } from '../_models/article';
 import { ArticleService } from '../services/article/article.service';
+import { AuthService } from '../services/auth/auth.service';
 
 @Component({
   selector: 'app-article-page',
@@ -14,7 +15,9 @@ export class ArticlePageComponent implements OnInit {
   articleId: number = 0;
   article! : Article;
   
-  constructor(private _activateRoute : ActivatedRoute, private _articleService : ArticleService) { }
+  constructor(private _activateRoute : ActivatedRoute, 
+    private _articleService : ArticleService,
+    public _authService: AuthService) { }
 
   ngOnInit(): void {
 
@@ -31,6 +34,13 @@ export class ArticlePageComponent implements OnInit {
       .subscribe(article => {
         this.article = article;
       });
+  }
+
+  public isAccessible() {
+    if(this._authService.isOwner(this.article?.creatorId!) || this._authService.isAdmin())
+      return true;
+
+    return false;
   }
 
 }

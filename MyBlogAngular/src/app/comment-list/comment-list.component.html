@@ -13,7 +13,7 @@
             <div class="comment-text-sm">
                 <span>{{comment.content}}</span>
             </div>
-            <div class="d-flex flex-row justify-content-end mt-1">
+            <div class="d-flex flex-row justify-content-end mt-1" *ngIf="isAccessible(comment)">
                 <button type="button" class="btn btn-link" (click)="openEditCommentDialog(comment)">Edit</button>
                 <button type="button" class="btn btn-link" (click)="openDeleteCommentDialog(comment)">Delete</button>
             </div>

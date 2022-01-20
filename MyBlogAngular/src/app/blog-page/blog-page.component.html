@@ -5,7 +5,7 @@
     <p class="lead my-3">{{blog.description}}</p>
   </div>
   <div class="col-md-1 ">
-    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+    <div class="btn-group" role="group" aria-label="Basic mixed styles example" *ngIf="isAccessible()">
       <a href="" class="btn btn-outline-warning" [routerLink]="['edit']">Edit</a>
       <a href="" class="btn btn-outline-danger" [routerLink]="['delete']">Delete</a>
     </div>
@@ -14,7 +14,12 @@
 
 <div class="row g-5">
   <div class="col">
-    <p class="text-end"><a href="" [routerLink]="['articles/new']">Create article</a></p>
+    
+    <p class="text-end" *ngIf="isAccessible()">
+      <a href="" [routerLink]="['articles/new']">Create article</a>
+    </p>
+    
+    
 
     <article class="blog-post" *ngFor="let article of articles">
       <h2 class="blog-post-title">{{article.title}}</h2>

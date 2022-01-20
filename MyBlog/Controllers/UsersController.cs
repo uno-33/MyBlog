@@ -168,7 +168,7 @@ namespace MyBlog.Controllers
         // GET: api/users/5/roles
         [HttpGet]
         [Route("{id}/roles")]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult<IEnumerable<string>>> GetAllRolesByUserId(string id)
         {
             var roles = await _userService.GetRolesByUserIdAsync(id);
@@ -186,7 +186,7 @@ namespace MyBlog.Controllers
         /// <param name="role">Role name</param>
         /// <returns>OK if successful, NotFound if either user or role isn't in DB</returns>
         [HttpPost("{id}/roles")]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<ActionResult> AddUserToRoleAsync(string id, [FromBody] string role)
         {
             var result = false;

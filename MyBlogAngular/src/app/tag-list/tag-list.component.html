@@ -1,15 +1,15 @@
 <div class="col">
     <div class="d-flex flex-wrap">
         <div *ngFor="let tag of tags; let i=index">
-            <button type="button" class="btn btn-outline-info btn-sm" (click)="getArticlesByTag(tag)">
+            <button type="button" class="btn btn-outline-info btn-sm ms-2" (click)="getArticlesByTag(tag)">
             {{tag.text}}
             </button>
-            <button type="button" class="btn btn-outline-danger btn-sm me-2" aria-label="Close" (click)="removeTag(tag)">
+            <button type="button" class="btn btn-outline-danger btn-sm" aria-label="Close" (click)="removeTag(tag)" *ngIf="isAccessible()">
                 <span aria-hidden="true">×</span>
             </button>
         </div>
         <div>
-            <button type="button" class="btn btn-link" (click)="openAddTagDialog()">Add Tag</button>
+            <button type="button" class="btn btn-link" (click)="openAddTagDialog()" *ngIf="isAccessible()">Add Tag</button>
         </div>
     </div>
 </div>

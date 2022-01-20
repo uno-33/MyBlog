@@ -2,24 +2,28 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs';
-import { Tag } from '../models/tag';
+import { Tag } from '../_models/tag';
 import { TagAddDialogComponent } from '../tag-add-dialog/tag-add-dialog.component';
 import { TagService } from '../services/tag/tag.service';
+import { AuthService } from '../services/auth/auth.service';
+import { ArticleService } from '../services/article/article.service';
 
 @Component({
   selector: 'app-tag-list',
-  templateUrl: './tag-list.component.html',
-  styleUrls: ['./tag-list.component.css']
+  templateUrl: './tag-list.component.html'
 })
 export class TagListComponent implements OnInit {
 
   articleId = 0;
+  authorId: string = '';
   tags : Tag[] = [];
 
   constructor(private _tagService: TagService,
     private _activateRoute: ActivatedRoute,
     private _dialog: MatDialog,
-    private _router: Router) { }
+    private _router: Router,
+    public _authService: AuthService,
+    private _articleService: ArticleService) { }
 
   ngOnInit(): void {
 
@@ -33,6 +37,16 @@ export class TagListComponent implements OnInit {
   LoadData() {
     this._tagService.getByArticleId(this.articleId)
       .subscribe(tags => this.tags = tags);
+
+    this._articleService.getById(this.articleId)
+      .subscribe(article => this.authorId = article.creatorId);
+  }
+
+  public isAccessible() {
+    if(this._authService.isOwner(this.authorId) || this._authService.isAdmin())
+      return true;
+
+    return false;
   }
 
   getArticlesByTag(tag: Tag) {

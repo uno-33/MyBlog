@@ -22,21 +22,21 @@ namespace MyBlogBLL.Services
     /// <summary>
     /// Class representing login system
     /// </summary>
-    public class AccountService : IAccountService
+    public class AuthService : IAuthService
     {
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
         private readonly AuthSettings _authSettings;
 
         /// <summary>
-        /// AccountService controller
+        /// AuthService controller
         /// </summary>
         /// <param name="userManager">Implementation of UserManager</param>
         /// <param name="mapper">Implementation of IMapper</param>
         /// <param name="authSettings">Implementation of IOptions<AuthSettings></param>
-        public AccountService(
-            UserManager<User> userManager, 
-            IMapper mapper, 
+        public AuthService(
+            UserManager<User> userManager,
+            IMapper mapper,
             IOptions<AuthSettings> authSettings)
         {
             _userManager = userManager;
@@ -55,7 +55,7 @@ namespace MyBlogBLL.Services
 
             var result = await _userManager.CreateAsync(user, model.Password);
 
-            if(result.Errors.Any())
+            if (result.Errors.Any())
             {
                 StringBuilder stringBuilder = new StringBuilder();
                 foreach (var error in result.Errors)
@@ -73,17 +73,23 @@ namespace MyBlogBLL.Services
         /// </summary>
         /// <param name="model">Model containing username and password</param>
         /// <returns>JwtModel</returns>
-        public async Task<JwtModel> LoginAsync(LoginModel model)
+        public async Task<AuthModel> LoginAsync(LoginModel model)
         {
             var user = await GetUserByLoginModelAsync(model);
 
             var token = await GenerateTokenAsync(user);
 
-            return new JwtModel
+            var userModel = new AuthModel
             {
+                UserName = user.UserName,
+                Id = user.Id,
+                DateOfCreation = user.DateOfCreation.ToString("MMMM dd, yyyy - H:mm"),
                 Token = token,
-                ExpiresIn = _authSettings.LifetimeInMinutes
+                TokenExpiresIn = _authSettings.LifetimeInMinutes,
+                Roles = await _userManager.GetRolesAsync(user)
             };
+
+            return userModel;
         }
 
         private async Task<User> GetUserByLoginModelAsync(LoginModel model)

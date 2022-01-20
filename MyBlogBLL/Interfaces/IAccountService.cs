@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace MyBlogBLL.Interfaces
 {
-    public interface IAccountService
+    public interface IAuthService
     {
-        Task<JwtModel> LoginAsync(LoginModel model);
+        Task<AuthModel> LoginAsync(LoginModel model);
         Task<bool> RegisterAsync(RegisterModel model);
     }
 }

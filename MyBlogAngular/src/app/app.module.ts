@@ -7,7 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { LoginComponent } from './login/login.component';
-import { AuthInterceptor } from 'src/Interceptors/auth.interceptor';
+import { AuthInterceptor } from 'src/app/_helpers/auth.interceptor';
 import { LatestArticlesComponent } from './latest-articles/latest-articles.component';
 import { SearchBoxComponent } from './search-box/search-box.component';
 import { LatestBlogsComponent } from './latest-blogs/latest-blogs.component';
@@ -28,6 +28,8 @@ import { CommentDeleteDialogComponent } from './comment-delete-dialog/comment-de
 import { TagListComponent } from './tag-list/tag-list.component';
 import { TagAddDialogComponent } from './tag-add-dialog/tag-add-dialog.component';
 import { SearchPageComponent } from './search-page/search-page.component';
+import { ErrorInterceptor } from './_helpers/error.interceptor';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +53,8 @@ import { SearchPageComponent } from './search-page/search-page.component';
     CommentDeleteDialogComponent,
     TagListComponent,
     TagAddDialogComponent,
-    SearchPageComponent
+    SearchPageComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
@@ -64,7 +67,8 @@ import { SearchPageComponent } from './search-page/search-page.component';
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}
+    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })

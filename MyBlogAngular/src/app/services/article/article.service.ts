@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiPaths } from 'src/apipaths';
-import { Article } from 'src/app/models/article';
+import { Article } from 'src/app/_models/article';
 import { environment } from 'src/environments/environment';
 
 @Injectable({

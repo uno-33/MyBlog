@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs';
 import { CommentService } from '../services/comment/comment.service';
-import { Comment } from '../models/comment';
+import { Comment } from '../_models/comment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { CommentEditDialogComponent } from '../comment-edit-dialog/comment-edit-dialog.component';
 import { CommentDeleteDialogComponent } from '../comment-delete-dialog/comment-delete-dialog.component';
+import { AuthService } from '../services/auth/auth.service';
 
 @Component({
   selector: 'app-comment-list',
-  templateUrl: './comment-list.component.html',
-  styleUrls: ['./comment-list.component.css']
+  templateUrl: './comment-list.component.html'
 })
 export class CommentListComponent implements OnInit {
 
@@ -22,7 +22,8 @@ export class CommentListComponent implements OnInit {
   constructor(private _activateRoute: ActivatedRoute, 
     private _commentService: CommentService, 
     private fb:FormBuilder,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    public _authService: AuthService) {
 
     this.addCommentForm = fb.group({
       content: ['', Validators.required]
@@ -41,6 +42,13 @@ export class CommentListComponent implements OnInit {
   LoadData() {
     this._commentService.getAll(this.articleId)
       .subscribe(comments => this.comments = comments);
+  }
+
+  public isAccessible(comment: Comment) {
+    if(this._authService.isOwner(comment.authorId) || this._authService.isAdmin())
+      return true;
+
+    return false;
   }
 
   addComment() {

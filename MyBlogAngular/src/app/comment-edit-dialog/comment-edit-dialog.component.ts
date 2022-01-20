@@ -3,8 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-comment-edit-dialog',
-  templateUrl: './comment-edit-dialog.component.html',
-  styleUrls: ['./comment-edit-dialog.component.css']
+  templateUrl: './comment-edit-dialog.component.html'
 })
 export class CommentEditDialogComponent implements OnInit {
 

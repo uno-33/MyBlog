@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiPaths } from 'src/apipaths';
-import { Article } from 'src/app/models/article';
-import { Tag } from 'src/app/models/tag';
+import { Article } from 'src/app/_models/article';
+import { Tag } from 'src/app/_models/tag';
 import { environment } from 'src/environments/environment';
 
 @Injectable({

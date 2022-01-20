@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiPaths } from 'src/apipaths';
 import { environment } from 'src/environments/environment';
-import { Comment } from 'src/app/models/comment';
+import { Comment } from 'src/app/_models/comment';
 
 @Injectable({
   providedIn: 'root'

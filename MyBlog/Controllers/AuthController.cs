@@ -15,17 +15,17 @@ namespace MyBlog.Controllers
     [ApiController]
     [Produces("application/json")]
     [Route("api/[controller]")]
-    public class AccountsController : ControllerBase
+    public class AuthController : ControllerBase
     {
-        private readonly IAccountService _accountService;
+        private readonly IAuthService _authService;
 
         /// <summary>
         /// Login system constructor
         /// </summary>
-        /// <param name="accountService">Implementation of accountService</param>
-        public AccountsController(IAccountService accountService)
+        /// <param name="authService">Implementation of accountService</param>
+        public AuthController(IAuthService authService)
         {
-            _accountService = accountService;
+            _authService = authService;
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace MyBlog.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<bool>> Register(RegisterModel model)
         {
-            return await _accountService.RegisterAsync(model);
+            return await _authService.RegisterAsync(model);
 
         }
 
@@ -46,9 +46,9 @@ namespace MyBlog.Controllers
         /// <param name="model">Model with username and password inside</param>
         /// <returns>UserModel with JWT inside</returns>
         [HttpPost("login")]
-        public async Task<ActionResult<JwtModel>> Login(LoginModel model)
+        public async Task<ActionResult<AuthModel>> Login(LoginModel model)
         {
-            return await _accountService.LoginAsync(model);
+            return await _authService.LoginAsync(model);
         }
     }
 }

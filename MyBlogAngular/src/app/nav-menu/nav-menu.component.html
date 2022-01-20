@@ -30,12 +30,20 @@
             <a class="nav-link text-dark" [routerLink]="['/blogs']">Blogs</a>
           </li>
         </ul>
-        <ul class="navbar-nav">
+        <ul class="navbar-nav" *ngIf="!_authService.isLoggedIn()">
           <li class="nav-item">
             <a class="nav-link text-dark" [routerLink]="['/login']">Login</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark" [routerLink]="['/']">New Account</a>
+            <a class="nav-link text-dark" [routerLink]="['/register']">New Account</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav" *ngIf="_authService.isLoggedIn()">
+          <li class="nav-item">
+            <a class="nav-link text-dark">Welcome, {{_authService.userValue.userName}}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-dark" [routerLink]="['/login']" (click)="_authService.logout()">Log Out</a>
           </li>
         </ul>
       </div>

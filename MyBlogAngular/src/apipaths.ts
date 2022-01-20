@@ -1,5 +1,5 @@
 export enum ApiPaths {
-  Accounts = '/accounts',
+  Auth = '/auth',
   Articles = '/articles',
   Blogs = '/blogs',
   Comments = '/comments',
