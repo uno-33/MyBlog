@@ -10,7 +10,7 @@ export class Article {
   id : number;
   title: string;
   content: string;
-  creationDate: Date;
+  dateOfCreation: Date;
   blogId: number;
   creatorId: string;
   creatorName: string;
@@ -21,7 +21,7 @@ export class Article {
   constructor(id : number,
     title: string,
     content: string,
-    creationDate: Date,
+    dateOfCreation: Date,
     blogId: number,
     creatorId: string,
     creatorName: string) {
@@ -29,7 +29,7 @@ export class Article {
     this.id = id;
     this.title = title;
     this.content = content;
-    this.creationDate = creationDate;
+    this.dateOfCreation = dateOfCreation;
     this.blogId = blogId;
     this.creatorId = creatorId;
     this.creatorName = creatorName;

@@ -35,7 +35,8 @@ namespace MyBlogBLL
             //    .ForMember(cm => cm.TagsIds, i => i.MapFrom(a => a.Tags.Select(x => x.Id)))
                 .ReverseMap();
             CreateMap<Article, ArticleModel>()
-                .ForMember(cm => cm.CreatorName, i => i.MapFrom(c => c.Creator.UserName));
+                .ForMember(cm => cm.CreatorName, i => i.MapFrom(c => c.Creator.UserName))
+                .ForMember(cm => cm.DateOfCreation, i => i.MapFrom(c => c.DateOfCreation.ToString("MMMM dd, yyyy - H:mm")));
             //.ForMember(cm => cm.CommentsIds, i => i.MapFrom(a => a.Comments.Select(x => x.Id)))
             //.ForMember(cm => cm.TagsIds, i => i.MapFrom(a => a.Tags.Select(x => x.Id)));
 

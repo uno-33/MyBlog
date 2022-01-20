@@ -9,7 +9,7 @@ namespace MyBlogBLL.Models
         public int Id { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
-        public DateTime DateOfCreation { get; set; }
+        public string DateOfCreation { get; set; }
         public int BlogId { get; set; }
         public string CreatorId { get; set; }
         public string CreatorName { get; set; }
@@ -18,7 +18,7 @@ namespace MyBlogBLL.Models
         {
             if (Title.Length == 0 || 
                 Content.Length == 0 || 
-                DateOfCreation == DateTime.MinValue || 
+                DateOfCreation.Length == 0 || 
                 CreatorId.Length == 0)
                 return false;
 

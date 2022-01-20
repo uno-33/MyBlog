@@ -18,7 +18,7 @@
 
     <article class="blog-post" *ngFor="let article of articles">
       <h2 class="blog-post-title">{{article.title}}</h2>
-      <p class="blog-post-meta">{{article.creationDate}} by <a href="#">{{article.creatorName}}</a></p>
+      <p class="blog-post-meta">{{article.dateOfCreation}} by <a href="#">{{article.creatorName}}</a></p>
 
       <p>{{article.content | truncate:230}}</p>
       <a href="" [routerLink]="['articles', article.id]"> See More</a>

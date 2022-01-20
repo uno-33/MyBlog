@@ -77,7 +77,7 @@ namespace MyBlog.Controllers
                     Content = articleViewModel.Content,
                     BlogId = articleViewModel.BlogId,
                     CreatorId = HttpContext.User.Identity.Name,
-                    DateOfCreation = DateTime.Now
+                    DateOfCreation = DateTime.Now.ToString()
                 };
                 await _articleService.AddAsync(model);
                 return Ok(model);

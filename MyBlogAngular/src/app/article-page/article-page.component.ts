@@ -1,4 +1,3 @@
-import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs';
@@ -14,7 +13,6 @@ export class ArticlePageComponent implements OnInit {
   blogId: number = 0;
   articleId: number = 0;
   article! : Article;
-  formattedDate: string = '';
   
   constructor(private _activateRoute : ActivatedRoute, private _articleService : ArticleService) { }
 
@@ -31,8 +29,7 @@ export class ArticlePageComponent implements OnInit {
   LoadData() {
     this._articleService.getById(this.articleId)
       .subscribe(article => {
-        this.article = article
-        this.formattedDate = formatDate(this.article.creationDate, 'dd/MM/yyyy', 'en-US');
+        this.article = article;
       });
   }
 
