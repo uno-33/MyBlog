@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Add new tag to this article</h1>
+
+<textarea matInput [(ngModel)]="dialogData.tagName"></textarea>
+
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button [mat-dialog-close]="dialogData.tagName" cdkFocusInitial>Add</button>
+</div>

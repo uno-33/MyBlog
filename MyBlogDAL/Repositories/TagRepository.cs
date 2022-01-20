@@ -52,8 +52,6 @@ namespace MyBlogDAL.Repositories
             if (entity == null)
                 return null;
 
-            _dbContext.Entry(entity).State = EntityState.Detached;
-
             return entity;
         }
 

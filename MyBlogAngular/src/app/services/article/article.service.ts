@@ -23,6 +23,11 @@ export class ArticleService {
     return this._http.get<Article[]>(url);
   }
 
+  getByTag(tagName: string) {
+    let url = `${this.baseUrl}${ApiPaths.Articles}/tag?tagName=${tagName}`;
+    return this._http.get<Article[]>(url);
+  }
+
   getById(id: number) {
     let url = `${this.baseUrl}${ApiPaths.Articles}/${id}`;
     return this._http.get<Article>(url);
