@@ -8,8 +8,7 @@ import { BlogService } from '../services/blog/blog.service';
 
 @Component({
   selector: 'app-blog-edit-form',
-  templateUrl: './blog-edit-form.component.html',
-  styleUrls: ['./blog-edit-form.component.css']
+  templateUrl: './blog-edit-form.component.html'
 })
 export class BlogEditFormComponent implements OnInit {
 
@@ -49,8 +48,8 @@ export class BlogEditFormComponent implements OnInit {
 
     if(val.name && val.description) {
       this._blogService.edit(this.blogId, val.name, val.description)
-      .subscribe(blog => {
-        this._router.navigate([ApiPaths.Blogs, blog.id]);
+      .subscribe(blogId => {
+        this._router.navigate([ApiPaths.Blogs, blogId]);
       })
     }
   }

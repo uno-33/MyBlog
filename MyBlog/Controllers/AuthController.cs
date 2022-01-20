@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyBlogBLL.Interfaces;
 using MyBlogBLL.Models;
+using MyBlogBLL.Models.InputModels;
 using MyBlogBLL.Validation;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace MyBlog.Controllers
         /// <param name="model">Model with username and password inside</param>
         /// <returns>true if register is successful</returns>
         [HttpPost("register")]
-        public async Task<ActionResult<bool>> Register(RegisterModel model)
+        public async Task<ActionResult<bool>> Register(AuthInputModel model)
         {
             return await _authService.RegisterAsync(model);
 
@@ -46,7 +47,7 @@ namespace MyBlog.Controllers
         /// <param name="model">Model with username and password inside</param>
         /// <returns>UserModel with JWT inside</returns>
         [HttpPost("login")]
-        public async Task<ActionResult<AuthModel>> Login(LoginModel model)
+        public async Task<ActionResult<AuthModel>> Login(AuthInputModel model)
         {
             return await _authService.LoginAsync(model);
         }

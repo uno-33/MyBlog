@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MyBlog.ViewModels
+namespace MyBlogBLL.Models.InputModels
 {
-    public class TagViewModel
+    public class BlogInputModel
     {
         public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

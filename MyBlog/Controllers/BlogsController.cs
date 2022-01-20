@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MyBlog.ViewModels;
 using MyBlogBLL.Models;
+using MyBlogBLL.Models.InputModels;
 using MyBlogBLL.Services;
 using MyBlogBLL.Validation;
 using System;
@@ -68,7 +68,7 @@ namespace MyBlog.Controllers
         // POST api/<BlogsController>
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<BlogModel>> Add([FromBody] BlogViewModel blogViewModel)
+        public async Task<ActionResult<BlogModel>> Add([FromBody] BlogInputModel blogViewModel)
         {
             try
             {
@@ -104,19 +104,12 @@ namespace MyBlog.Controllers
         // PUT api/<BlogsController>/5
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<ActionResult<BlogModel>> Update(int id, [FromBody] BlogViewModel blogViewModel)
+        public async Task<ActionResult<int>> Update(int id, [FromBody] BlogInputModel blogInputModel)
         {
             try
             {
-                var model = await _blogService.GetByIdAsync(id);
-                if (model == null)
-                    return NotFound();
-
-                model.Name = blogViewModel.Name;
-                model.Description = blogViewModel.Description;
-
-                _blogService.Update(model);
-                return Ok(model);
+                await _blogService.Update(id, blogInputModel);
+                return Ok(id);
             }
             catch (BlogException ex)
             {

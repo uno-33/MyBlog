@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MyBlogBLL.Models;
+using MyBlogBLL.Models.InputModels;
 using MyBlogBLL.Validation;
 using MyBlogDAL.Entities;
 using MyBlogDAL.Interfaces;
@@ -141,14 +142,19 @@ namespace MyBlogBLL.Services
         /// Updates blog
         /// </summary>
         /// <param name="model">BlogModel to update</param>
-        public void Update(BlogModel model)
+        public async Task<int> Update(int id, BlogInputModel inputModel)
         {
-            ValidateBlogModel(model);
+            var entity = await _unitOfWork.BlogRepository.GetByIdAsync(id);
+            if (entity == null)
+                throw new ArgumentException("There is no blog with such Id.");
 
-            var entity = _mapper.Map<Blog>(model);
+            entity.Name = inputModel.Name;
+            entity.Description = inputModel.Description;
 
             _unitOfWork.BlogRepository.Update(entity);
-            _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
+
+            return entity.Id;
         }
 
         private void ValidateBlogModel(BlogModel model)

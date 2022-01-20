@@ -1,4 +1,5 @@
 ﻿using MyBlogBLL.Models;
+using MyBlogBLL.Models.InputModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,6 +15,6 @@ namespace MyBlogBLL.Services
         IEnumerable<ArticleModel> GetByMatchingText(string text);
         Task<IEnumerable<ArticleModel>> GetByTagAsync(string tagName);
         IEnumerable<ArticleModel> GetLatest(int count = 5);
-        void Update(ArticleModel model);
+        Task<int> Update(int id, ArticleInputModel inputModel);
     }
 }

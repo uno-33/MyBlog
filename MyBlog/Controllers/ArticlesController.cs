@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MyBlog.ViewModels;
 using MyBlogBLL.Models;
+using MyBlogBLL.Models.InputModels;
 using MyBlogBLL.Services;
 using MyBlogBLL.Validation;
 using System;
@@ -67,7 +67,7 @@ namespace MyBlog.Controllers
         // POST api/<ArticlesController>
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<ArticleModel>> Create([FromBody] ArticleViewModel articleViewModel)
+        public async Task<ActionResult<ArticleModel>> Create([FromBody] ArticleInputModel articleViewModel)
         {
             try
             {
@@ -100,24 +100,17 @@ namespace MyBlog.Controllers
         /// Updates article
         /// </summary>
         /// <param name="id">Article id</param>
-        /// <param name="articleViewModel">ArticleViewModel to update</param>
+        /// <param name="articleInputModel">ArticleViewModel to update</param>
         /// <returns>OK if successful, BadRequest if not</returns>
         // PUT api/<ArticlesController>/5
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<ActionResult<ArticleModel>> Update(int id, [FromBody] ArticleViewModel articleViewModel)
+        public async Task<ActionResult<ArticleModel>> Update(int id, [FromBody] ArticleInputModel articleInputModel)
         {
             try
             {
-                var model = await _articleService.GetByIdAsync(id);
-                if (model == null)
-                    return NotFound();
-
-                model.Title = articleViewModel.Title;
-                model.Content = articleViewModel.Content;
-
-                _articleService.Update(model);
-                return Ok(model);
+                await _articleService.Update(id, articleInputModel);
+                return Ok(id);
             }
             catch (BlogException ex)
             {
@@ -227,7 +220,7 @@ namespace MyBlog.Controllers
         /// <param name="tagViewModel">Name of the tag</param>
         /// <returns></returns>
         [HttpPost("{id}/tags")]
-        public async Task<ActionResult> AddTagAsync(int id, [FromBody] TagViewModel tagViewModel)
+        public async Task<ActionResult> AddTagAsync(int id, [FromBody] TagInputModel tagViewModel)
         {
             try
             {

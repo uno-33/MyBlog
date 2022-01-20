@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MyBlog.ViewModels;
 using MyBlogBLL.Models;
+using MyBlogBLL.Models.InputModels;
 using MyBlogBLL.Services;
 using MyBlogBLL.Validation;
 using System;
@@ -68,7 +68,7 @@ namespace MyBlog.Controllers
         // POST api/<CommentsController>
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult> Create([FromBody] CommentViewModel commentViewModel)
+        public async Task<ActionResult> Create([FromBody] CommentInputModel commentViewModel)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace MyBlog.Controllers
                 {
                     Content = commentViewModel.Content,
                     ArticleId = commentViewModel.ArticleId,
-                    DateOfCreation = DateTime.Now,
+                    DateOfCreation = DateTime.Now.ToString(),
                     AuthorId = HttpContext.User.Identity.Name
                 };
                 await _commentService.AddAsync(model);
@@ -105,18 +105,12 @@ namespace MyBlog.Controllers
         // PUT api/<CommentsController>/5
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<ActionResult<CommentModel>> Update(int id, [FromBody] CommentViewModel commentViewModel)
+        public async Task<ActionResult<int>> Update(int id, [FromBody] CommentInputModel commentInputModel)
         {
             try
             {
-                var model = await _commentService.GetByIdAsync(id);
-                if (model == null)
-                    return NotFound();
-
-                model.Content = commentViewModel.Content;
-
-                _commentService.Update(model);
-                return Ok(model);
+                await _commentService.Update(id, commentInputModel);
+                return Ok(id);
             }
             catch (BlogException ex)
             {

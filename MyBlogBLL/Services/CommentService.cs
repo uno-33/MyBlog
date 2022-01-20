@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MyBlogBLL.Models;
+using MyBlogBLL.Models.InputModels;
 using MyBlogBLL.Validation;
 using MyBlogDAL.Entities;
 using MyBlogDAL.Interfaces;
@@ -93,7 +94,7 @@ namespace MyBlogBLL.Services
             var article = await _unitOfWork
                 .ArticleRepository
                 .FindAll()
-                .Include(x => x.Comments)
+                .Include(x => x.Comments).ThenInclude(x => x.Author)
                 .SingleOrDefaultAsync(x => x.Id == id);
 
             if (article == null)
@@ -106,14 +107,18 @@ namespace MyBlogBLL.Services
         /// Updates comment
         /// </summary>
         /// <param name="model">CommentModel to update</param>
-        public void Update(CommentModel model)
+        public async Task<int> Update(int id, CommentInputModel inputModel)
         {
-            ValidateCommentModel(model);
+            var entity = await _unitOfWork.CommentRepository.GetByIdAsync(id);
+            if (entity == null)
+                throw new ArgumentException("There is no comment with such Id.");
 
-            var entity = _mapper.Map<Comment>(model);
+            entity.Content = inputModel.Content;
 
             _unitOfWork.CommentRepository.Update(entity);
-            _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
+
+            return entity.Id;
         }
 
         private void ValidateCommentModel(CommentModel model)

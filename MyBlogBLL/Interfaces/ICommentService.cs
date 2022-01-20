@@ -1,4 +1,5 @@
 ﻿using MyBlogBLL.Models;
+using MyBlogBLL.Models.InputModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,6 +12,6 @@ namespace MyBlogBLL.Services
         IEnumerable<CommentModel> GetAll();
         Task<IEnumerable<CommentModel>> GetAllByArticleIdAsync(int id);
         Task<CommentModel> GetByIdAsync(int id);
-        void Update(CommentModel model);
+        Task<int> Update(int id, CommentInputModel model);
     }
 }

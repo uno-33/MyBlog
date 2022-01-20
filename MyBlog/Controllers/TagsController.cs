@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MyBlog.ViewModels;
 using MyBlogBLL.Models;
 using MyBlogBLL.Services;
 using MyBlogBLL.Validation;

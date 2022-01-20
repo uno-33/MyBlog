@@ -45,6 +45,6 @@ export class ArticleService {
 
   edit(id: number, title: string, content: string) {
     let url = `${this.baseUrl}${ApiPaths.Articles}/${id}`;
-    return this._http.put<Article>(url, {id, title, content});
+    return this._http.put<number>(url, {id, title, content});
   }
 }

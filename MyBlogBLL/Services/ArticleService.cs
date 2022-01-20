@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MyBlogBLL.Models;
+using MyBlogBLL.Models.InputModels;
 using MyBlogBLL.Validation;
 using MyBlogDAL.Entities;
 using MyBlogDAL.Interfaces;
@@ -113,17 +114,24 @@ namespace MyBlogBLL.Services
         }
 
         /// <summary>
-        /// Updates article
+        /// Update article
         /// </summary>
-        /// <param name="model">ArticleModel to update</param>
-        public void Update(ArticleModel model)
+        /// <param name="id">Id of article</param>
+        /// <param name="inputModel">Title and Content of article</param>
+        /// <returns>Id of article</returns>
+        public async Task<int> Update(int id, ArticleInputModel inputModel)
         {
-            ValidateArticleModel(model);
+            var entity = await _unitOfWork.ArticleRepository.GetByIdAsync(id);
+            if (entity == null)
+                throw new ArgumentException("There is no article with such Id.");
 
-            var entity = _mapper.Map<Article>(model);
+            entity.Title = inputModel.Title;
+            entity.Content = inputModel.Content;
 
             _unitOfWork.ArticleRepository.Update(entity);
-            _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
+
+            return entity.Id;
         }
 
         /// <summary>

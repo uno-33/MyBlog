@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MyBlogBLL.Interfaces;
 using MyBlogBLL.Models;
+using MyBlogBLL.Models.InputModels;
 using MyBlogBLL.Validation;
 using MyBlogDAL;
 using MyBlogDAL.Entities;
@@ -49,7 +50,7 @@ namespace MyBlogBLL.Services
         /// </summary>
         /// <param name="model">Model containing username and password</param>
         /// <returns>true if successful, false if not</returns>
-        public async Task<bool> RegisterAsync(RegisterModel model)
+        public async Task<bool> RegisterAsync(AuthInputModel model)
         {
             User user = new User { UserName = model.UserName, DateOfCreation = DateTime.Now };
 
@@ -73,7 +74,7 @@ namespace MyBlogBLL.Services
         /// </summary>
         /// <param name="model">Model containing username and password</param>
         /// <returns>JwtModel</returns>
-        public async Task<AuthModel> LoginAsync(LoginModel model)
+        public async Task<AuthModel> LoginAsync(AuthInputModel model)
         {
             var user = await GetUserByLoginModelAsync(model);
 
@@ -92,7 +93,7 @@ namespace MyBlogBLL.Services
             return userModel;
         }
 
-        private async Task<User> GetUserByLoginModelAsync(LoginModel model)
+        private async Task<User> GetUserByLoginModelAsync(AuthInputModel model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
 

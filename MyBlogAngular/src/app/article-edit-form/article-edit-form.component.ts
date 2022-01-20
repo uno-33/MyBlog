@@ -7,8 +7,7 @@ import { ArticleService } from '../services/article/article.service';
 
 @Component({
   selector: 'app-article-edit-form',
-  templateUrl: './article-edit-form.component.html',
-  styleUrls: ['./article-edit-form.component.css']
+  templateUrl: './article-edit-form.component.html'
 })
 export class ArticleEditFormComponent implements OnInit {
 
@@ -54,8 +53,8 @@ export class ArticleEditFormComponent implements OnInit {
 
     if(val.title && val.content) {
       this._articleService.edit(this.articleId, val.title, val.content)
-      .subscribe(article => {
-        this._router.navigate(['blogs', this.blogId, 'articles', article.id]);
+      .subscribe(articleId => {
+        this._router.navigate(['blogs', this.blogId, 'articles', articleId]);
       })
     }
   }
