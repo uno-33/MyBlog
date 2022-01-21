@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyBlog.Filters;
 using MyBlogBLL.Models;
 using MyBlogBLL.Models.InputModels;
 using MyBlogBLL.Services;
@@ -68,6 +69,7 @@ namespace MyBlog.Controllers
         // POST api/<BlogsController>
         [HttpPost]
         [Authorize]
+        [ValidationFilter]
         public async Task<ActionResult<BlogModel>> Add([FromBody] BlogInputModel blogViewModel)
         {
             try
@@ -99,11 +101,12 @@ namespace MyBlog.Controllers
         /// Updates blog
         /// </summary>
         /// <param name="id">Blog id</param>
-        /// <param name="blogViewModel">BlogViewModel to update</param>
+        /// <param name="blogInputModel">BlogViewModel to update</param>
         /// <returns>OK if successful, BadRequest if not</returns>
         // PUT api/<BlogsController>/5
         [HttpPut("{id}")]
         [Authorize]
+        [ValidationFilter]
         public async Task<ActionResult<int>> Update(int id, [FromBody] BlogInputModel blogInputModel)
         {
             try

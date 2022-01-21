@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MyBlog.Filters;
 using MyBlogBLL.Interfaces;
 using MyBlogBLL.Models;
+using MyBlogBLL.Models.InputModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,26 +69,34 @@ namespace MyBlog.Controllers
         }
 
         /// <summary>
-        /// Updates user
+        /// Update user
         /// </summary>
         /// <param name="id">User id</param>
-        /// <param name="model">UserModel to update</param>
+        /// <param name="inputModel">User Name</param>
         /// <returns></returns>
         // PUT: api/users/5
         [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Update(string id, UserModel model)
+        [Authorize]
+        [ValidationFilter]
+        public async Task<ActionResult<string>> Update(string id, UserInputModel inputModel)
         {
-            var result = await _userService.UpdateByIdAsync(id, model);
-
-            if (!result)
-                return NotFound();
-
-            return Ok();
+            try
+            {
+                await _userService.UpdateByIdAsync(id, inputModel);
+                return Ok(id);
+            }
+            catch(ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         /// <summary>
-        /// Deletes user from DB
+        /// Delete user from DB
         /// </summary>
         /// <param name="id">User id</param>
         /// <returns>OK if successful, NotFound if user with such id doesn't exist</returns>
@@ -168,6 +178,7 @@ namespace MyBlog.Controllers
         // GET: api/users/5/roles
         [HttpGet]
         [Route("{id}/roles")]
+        [Authorize]
         //[Authorize]
         public async Task<ActionResult<IEnumerable<string>>> GetAllRolesByUserId(string id)
         {
@@ -186,6 +197,7 @@ namespace MyBlog.Controllers
         /// <param name="role">Role name</param>
         /// <returns>OK if successful, NotFound if either user or role isn't in DB</returns>
         [HttpPost("{id}/roles")]
+        [Authorize]
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult> AddUserToRoleAsync(string id, [FromBody] string role)
         {

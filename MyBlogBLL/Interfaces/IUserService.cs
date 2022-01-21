@@ -1,4 +1,5 @@
 ﻿using MyBlogBLL.Models;
+using MyBlogBLL.Models.InputModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,7 +15,7 @@ namespace MyBlogBLL.Interfaces
         Task<IEnumerable<BlogModel>> GetBlogsByUserIdAsync(string id);
         Task<UserModel> GetByIdAsync(string id);
         Task<IEnumerable<CommentModel>> GetCommentsByUserIdAsync(string id);
-        Task<bool> UpdateByIdAsync(string id, UserModel model);
+        Task<string> UpdateByIdAsync(string id, UserInputModel model);
         Task<IEnumerable<string>> GetRolesByUserIdAsync(string id);
     }
 }

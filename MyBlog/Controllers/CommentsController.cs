@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyBlog.Filters;
 using MyBlogBLL.Models;
 using MyBlogBLL.Models.InputModels;
 using MyBlogBLL.Services;
@@ -63,19 +64,20 @@ namespace MyBlog.Controllers
         /// <summary>
         /// Creates new comment
         /// </summary>
-        /// <param name="commentViewModel">CommentViewModel to create</param>
+        /// <param name="commentInputModel">CommentViewModel to create</param>
         /// <returns>OK if successful, BadRequest if not</returns>
         // POST api/<CommentsController>
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult> Create([FromBody] CommentInputModel commentViewModel)
+        [ValidationFilter]
+        public async Task<ActionResult> Create([FromBody] CommentInputModel commentInputModel)
         {
             try
             {
                 var model = new CommentModel
                 {
-                    Content = commentViewModel.Content,
-                    ArticleId = commentViewModel.ArticleId,
+                    Content = commentInputModel.Content,
+                    ArticleId = commentInputModel.ArticleId,
                     DateOfCreation = DateTime.Now.ToString(),
                     AuthorId = HttpContext.User.Identity.Name
                 };
@@ -100,11 +102,12 @@ namespace MyBlog.Controllers
         /// Updates comment
         /// </summary>
         /// <param name="id">Comment id</param>
-        /// <param name="commentViewModel">Updated content</param>
+        /// <param name="commentInputModel">Updated content</param>
         /// <returns>OK if successful, BadRequest if not</returns>
         // PUT api/<CommentsController>/5
         [HttpPut("{id}")]
         [Authorize]
+        [ValidationFilter]
         public async Task<ActionResult<int>> Update(int id, [FromBody] CommentInputModel commentInputModel)
         {
             try

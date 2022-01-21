@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyBlogBLL.Interfaces;
 using MyBlogBLL.Models;
+using MyBlogBLL.Models.InputModels;
 using MyBlogDAL.Entities;
 using MyBlogDAL.Interfaces;
 using System;
@@ -95,20 +96,17 @@ namespace MyBlogBLL.Services
         /// <param name="id">User id</param>
         /// <param name="model">UserModel</param>
         /// <returns>true if successful, false if user not found</returns>
-        public async Task<bool> UpdateByIdAsync(string id, UserModel model)
+        public async Task<string> UpdateByIdAsync(string id, UserInputModel inputModel)
         {
             var entity = await _userManager.FindByIdAsync(id);
             if (entity == null)
-                return false;
+                throw new ArgumentException("There is no user with such Id");
 
-            model.Id = id;
+            entity.UserName = inputModel.UserName;
 
-            entity.UserName = model.UserName;
-            // TODO: finish this up
+            await _userManager.UpdateAsync(entity);
 
-            var result = await _userManager.UpdateAsync(entity);
-
-            return result.Succeeded;
+            return entity.Id;
         }
 
         /// <summary>

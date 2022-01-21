@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyBlog.Filters;
 using MyBlogBLL.Models;
 using MyBlogBLL.Models.InputModels;
 using MyBlogBLL.Services;
@@ -67,6 +68,7 @@ namespace MyBlog.Controllers
         // POST api/<ArticlesController>
         [HttpPost]
         [Authorize]
+        [ValidationFilter]
         public async Task<ActionResult<ArticleModel>> Create([FromBody] ArticleInputModel articleViewModel)
         {
             try
@@ -105,6 +107,7 @@ namespace MyBlog.Controllers
         // PUT api/<ArticlesController>/5
         [HttpPut("{id}")]
         [Authorize]
+        [ValidationFilter]
         public async Task<ActionResult<ArticleModel>> Update(int id, [FromBody] ArticleInputModel articleInputModel)
         {
             try
@@ -154,12 +157,14 @@ namespace MyBlog.Controllers
         [Route("{id}/comments")]
         public async Task<ActionResult<IEnumerable<CommentModel>>> GetCommentsByArticleId(int id)
         {
-            var comments = await _commentService.GetAllByArticleIdAsync(id);
-
-            if (comments == null)
-                return NotFound();
-
-            return Ok(comments);
+            try
+            {
+                return Ok(await _commentService.GetAllByArticleIdAsync(id));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         /// <summary>
@@ -181,7 +186,14 @@ namespace MyBlog.Controllers
         [HttpGet("tag")]
         public async Task<ActionResult<IEnumerable<ArticleModel>>> GetByTagAsync(string tagName)
         {
-            return Ok(await _articleService.GetByTagAsync(tagName));
+            try
+            {
+                return Ok(await _articleService.GetByTagAsync(tagName));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         /// <summary>
@@ -205,12 +217,18 @@ namespace MyBlog.Controllers
         [Route("{id}/tags")]
         public async Task<ActionResult<IEnumerable<TagModel>>> GetAllByArticleIdAsync(int id)
         {
-            var tags = await _tagService.GetAllByArticleIdAsync(id);
-
-            if (tags == null)
-                return NotFound();
-
-            return Ok(tags);
+            try
+            {
+                return Ok(await _tagService.GetAllByArticleIdAsync(id));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         /// <summary>
@@ -220,6 +238,8 @@ namespace MyBlog.Controllers
         /// <param name="tagViewModel">Name of the tag</param>
         /// <returns></returns>
         [HttpPost("{id}/tags")]
+        [Authorize]
+        [ValidationFilter]
         public async Task<ActionResult> AddTagAsync(int id, [FromBody] TagInputModel tagViewModel)
         {
             try
@@ -240,6 +260,7 @@ namespace MyBlog.Controllers
         /// <param name="tagName">Name of the tag</param>
         /// <returns></returns>
         [HttpDelete("{id}/tags/{tagName}")]
+        [Authorize]
         public async Task<ActionResult> RemoveTagAsync(int id, string tagName)
         {
             try

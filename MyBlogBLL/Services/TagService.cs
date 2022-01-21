@@ -95,6 +95,9 @@ namespace MyBlogBLL.Services
                 .Include(x => x.Tags)
                 .SingleOrDefaultAsync(x => x.Id == id);
 
+            if (article == null)
+                throw new ArgumentException("There is no article with such Id");
+
             return _mapper.Map<IEnumerable<TagModel>>(article.Tags);
         }
 
